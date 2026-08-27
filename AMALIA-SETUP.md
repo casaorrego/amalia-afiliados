@@ -51,11 +51,16 @@ de entorno con el id: basta con que el nombre coincida.
 ## Puesta en marcha
 
 1. En Supabase: `create schema if not exists refferq;`
-2. Crear las 28 tablas — el CLI de Prisma lee la URL cruda, así que el
-   parámetro se pasa en la invocación:
-   ```
-   DATABASE_URL="$(grep ^DATABASE_URL .env.local | cut -d'"' -f2)?schema=refferq" npx prisma db push
-   ```
+2. Crear las 28 tablas con **`npm run db:push`** — nunca
+   `npx prisma db push` a pelo.
+
+   El CLI de Prisma lee `DATABASE_URL` cruda y se salta el forzado de
+   schema que hace `src/lib/prisma.ts`. Una URL sin `?schema` apuntaría
+   a `public`, que es donde viven las historias clínicas. El wrapper
+   `scripts/db-push.mjs` impone el schema, aborta si la URL trae el
+   marcador `[YOUR-PASSWORD]` sin reemplazar, y corre Prisma SIN
+   `--accept-data-loss` para que cualquier operación destructiva falle
+   en vez de ejecutarse.
 3. Proyecto en Vercel con las variables de arriba.
 4. DNS: `CNAME afiliados → cname.vercel-dns.com`
 5. Registrarse en `/register`. **Ojo:** el portal bloquea a propósito
