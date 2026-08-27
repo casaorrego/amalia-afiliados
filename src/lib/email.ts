@@ -129,6 +129,10 @@ class EmailService {
     html: string;
   }): Promise<{ success: boolean; message: string }> {
     try {
+      if (!process.env.RESEND_API_KEY) {
+        console.log('[email] proveedor no configurado — correo omitido:', params?.subject ?? 'custom');
+        return { success: true, message: 'Email skipped (no provider configured)' };
+      }
       const { Resend } = await import('resend');
       const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -882,6 +886,10 @@ class EmailService {
 
   async sendCustomEmail(to: string, subject: string, html: string): Promise<{ success: boolean; message: string }> {
     try {
+      if (!process.env.RESEND_API_KEY) {
+        console.log('[email] proveedor no configurado — correo omitido:', subject);
+        return { success: true, message: 'Email skipped (no provider configured)' };
+      }
       const { Resend } = await import('resend');
       const resend = new Resend(process.env.RESEND_API_KEY);
       const result = await resend.emails.send({
