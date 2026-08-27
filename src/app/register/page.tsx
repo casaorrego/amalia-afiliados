@@ -51,7 +51,7 @@ export default function RegisterPage() {
       const registerData = await registerRes.json();
 
       if (!registerRes.ok) {
-        setError(registerData.message || 'Registration failed');
+        setError(registerData.message || 'No pudimos crear la cuenta');
         setLoading(false);
         return;
       }
@@ -67,14 +67,14 @@ export default function RegisterPage() {
 
       if (otpRes.ok) {
         setStep('otp');
-        setMessage('Account created! A verification code has been sent to your email.');
+        setMessage('¡Cuenta creada! Te enviamos un código a tu correo.');
       } else {
         // Registration succeeded but OTP failed - still move to OTP step
         setStep('otp');
-        setError(otpData.error || 'Failed to send code. Try resending.');
+        setError(otpData.error || 'No pudimos enviarte el código. Intenta reenviarlo.');
       }
     } catch (_e) {
-      setError('Something went wrong. Please try again.');
+      setError('Algo salió mal. Intenta de nuevo.');
     } finally {
       setLoading(false);
     }
@@ -83,7 +83,7 @@ export default function RegisterPage() {
   const handleVerifyOTP = async (e: React.FormEvent) => {
     e.preventDefault();
     if (otp.length < 6) {
-      setError('Please enter the full 6-digit code');
+      setError('Escribe los 6 dígitos completos');
       return;
     }
     setError('');
@@ -114,7 +114,7 @@ export default function RegisterPage() {
         setError(data.error || 'Invalid verification code');
       }
     } catch (_e) {
-      setError('Verification failed. Please try again.');
+      setError('No pudimos verificar el código. Intenta de nuevo.');
     } finally {
       setLoading(false);
     }
@@ -133,12 +133,12 @@ export default function RegisterPage() {
       });
 
       if (res.ok) {
-        setMessage('A new verification code has been sent.');
+        setMessage('Te enviamos un código nuevo.');
       } else {
-        setError('Failed to resend code. Please try again.');
+        setError('No pudimos reenviar el código. Intenta de nuevo.');
       }
     } catch (_e) {
-      setError('Failed to resend code.');
+      setError('No pudimos reenviar el código.');
     } finally {
       setLoading(false);
     }
@@ -219,7 +219,7 @@ export default function RegisterPage() {
                     {loading ? (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     ) : null}
-                    {loading ? 'Creating account...' : 'Create Account'}
+                    {loading ? 'Creating account...' : 'Crear cuenta'}
                   </Button>
                 </CardFooter>
               </form>
@@ -281,7 +281,7 @@ export default function RegisterPage() {
                     ) : (
                       <ShieldCheck className="mr-2 h-4 w-4" />
                     )}
-                    {loading ? 'Verifying...' : 'Verify & Continue'}
+                    {loading ? 'Verifying...' : 'Verificar y continuar'}
                   </Button>
                   <div className="flex items-center justify-between w-full">
                     <Button

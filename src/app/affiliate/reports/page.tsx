@@ -98,7 +98,7 @@ export default function ReportsPage() {
           d.setMonth(d.getMonth() - i);
           const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
           months[key] = {
-            month: d.toLocaleDateString('en-IN', { month: 'short', year: 'numeric' }),
+            month: d.toLocaleDateString('es-CO', { month: 'short', year: 'numeric' }),
             referrals: 0,
             conversions: 0,
             earnings: 0,
@@ -135,7 +135,7 @@ export default function ReportsPage() {
   };
 
   const formatCurrency = (cents: number) =>
-    `\u20B9${(cents / 100).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    `\u20B9${(cents / 100).toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
   const exportCSV = () => {
     const headers = ['Mes', 'Referidas', 'Conversiones', 'Earnings (₹)'];

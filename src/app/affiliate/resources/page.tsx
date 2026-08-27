@@ -202,8 +202,8 @@ export default function ResourcesPage() {
             <p className="font-medium">No hay material disponible</p>
             <p className="mt-1 text-sm text-muted-foreground">
               {resources.length === 0
-                ? 'Marketing resources will appear here once uploaded by the admin team'
-                : 'Try adjusting your search or filter'}
+                ? 'Acá va a aparecer el material de promoción cuando lo subamos'
+                : 'Prueba cambiando la búsqueda o el filtro'}
             </p>
           </CardContent>
         </Card>

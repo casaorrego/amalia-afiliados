@@ -148,15 +148,15 @@ export default function AffiliateDashboard() {
       const data = await response.json();
 
       if (data.success) {
-        showNotification('success', 'Lead submitted successfully! Waiting for admin approval.');
+        showNotification('success', '¡Referida registrada! Queda pendiente de aprobación.');
         setShowSubmitModal(false);
         setSubmitForm({ leadName: '', leadEmail: '', estimatedValue: '0' });
         loadDashboardData();
       } else {
-        showNotification('error', data.error || 'Failed to submit lead');
+        showNotification('error', data.error || 'No pudimos registrar la referida');
       }
     } catch (_e) {
-      showNotification('error', 'An error occurred while submitting lead');
+      showNotification('error', 'No pudimos registrar la referida');
     } finally {
       setSubmitLoading(false);
     }
@@ -172,7 +172,7 @@ export default function AffiliateDashboard() {
         showNotification('error', 'Failed to generate code: ' + data.error);
       }
     } catch (_e) {
-      showNotification('error', 'Failed to generate code. Please try again.');
+      showNotification('error', 'No pudimos generar tu código. Intenta de nuevo.');
     }
   };
 
@@ -188,7 +188,7 @@ export default function AffiliateDashboard() {
   };
 
   const formatDate = (date: string) =>
-    new Date(date).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' });
+    new Date(date).toLocaleDateString('es-CO', { year: 'numeric', month: 'short', day: 'numeric' });
 
   const formatCurrency = (cents: number) =>
     formatCOP(cents);
@@ -275,7 +275,7 @@ export default function AffiliateDashboard() {
             bg: 'bg-amber-500/10',
             description: stats?.nextMaturesAt
               ? `Next maturity: ${new Date(stats.nextMaturesAt).toLocaleDateString()}`
-              : 'Held for refund period'
+              : 'Retenido durante el periodo de garantía'
           },
           { label: 'Clics totales', value: stats?.totalClicks || 0, icon: MousePointerClick, color: 'text-blue-600', bg: 'bg-blue-500/10' },
           { label: 'Referidas totales', value: stats?.totalLeads || 0, icon: Target, color: 'text-rose-600', bg: 'bg-rose-500/10' },
@@ -386,7 +386,7 @@ export default function AffiliateDashboard() {
         </CardHeader>
         <CardContent className="p-0">
           {referrals.length === 0 ? (
-            <EmptyState icon={Users} message="No referrals yet" />
+            <EmptyState icon={Users} message="Todavía no tienes referidas" />
           ) : (
             <Table>
               <TableHeader>

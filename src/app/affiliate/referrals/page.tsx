@@ -113,10 +113,10 @@ export default function ReferralsPage() {
         setSubmitForm({ leadName: '', leadEmail: '', estimatedValue: '0' });
         fetchReferrals();
       } else {
-        showNotification('error', data.error || 'Failed to submit lead');
+        showNotification('error', data.error || 'No pudimos registrar la referida');
       }
     } catch (_e) {
-      showNotification('error', 'An error occurred while submitting lead');
+      showNotification('error', 'No pudimos registrar la referida');
     } finally {
       setSubmitLoading(false);
     }
@@ -128,7 +128,7 @@ export default function ReferralsPage() {
   };
 
   const formatDate = (date: string) =>
-    new Date(date).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' });
+    new Date(date).toLocaleDateString('es-CO', { year: 'numeric', month: 'short', day: 'numeric' });
 
   const getStatusBadge = (status: string) => {
     const map: Record<string, { variant: 'default' | 'secondary' | 'destructive' | 'outline'; icon: React.ElementType }> = {
@@ -278,7 +278,7 @@ export default function ReferralsPage() {
               <Users className="h-12 w-12 text-muted-foreground/40 mb-3" />
               <p className="font-medium">No hay referidas</p>
               <p className="mt-1 text-sm text-muted-foreground">
-                {referrals.length === 0 ? 'Start submitting leads to earn commissions' : 'Try adjusting your filters'}
+                {referrals.length === 0 ? 'Registra tu primera referida para empezar a ganar' : 'Prueba cambiando los filtros'}
               </p>
               {referrals.length === 0 && (
                 <Button className="mt-4" onClick={() => setShowSubmitModal(true)}>Registra tu primera referida</Button>

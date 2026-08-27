@@ -93,10 +93,10 @@ export default function SettingsPage() {
         showNotification('success', 'Settings updated successfully!');
       } else {
         const data = await res.json();
-        showNotification('error', data.error || 'Failed to update settings');
+        showNotification('error', data.error || 'No pudimos guardar los cambios');
       }
     } catch (_e) {
-      showNotification('error', 'An error occurred');
+      showNotification('error', 'Algo salió mal');
     } finally {
       setSaving(false);
     }
@@ -113,7 +113,7 @@ export default function SettingsPage() {
         showNotification('error', 'Failed to generate code: ' + data.error);
       }
     } catch (_e) {
-      showNotification('error', 'Failed to generate code');
+      showNotification('error', 'No pudimos generar tu código');
     }
   };
 
@@ -297,7 +297,7 @@ export default function SettingsPage() {
       {/* Save Button */}
       <div className="flex justify-end">
         <Button onClick={handleSave} disabled={saving} className="min-w-[120px]">
-          {saving ? 'Saving...' : 'Save Changes'}
+          {saving ? 'Saving...' : 'Guardar cambios'}
         </Button>
       </div>
     </div>

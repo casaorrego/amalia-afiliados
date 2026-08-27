@@ -50,12 +50,12 @@ export default function LoginPage() {
 
       if (otpRes.ok && otpData.success) {
         setStep('otp');
-        setMessage(otpData.message || 'A verification code has been sent to your email.');
+        setMessage(otpData.message || 'Te enviamos un código a tu correo.');
       } else {
-        setError(otpData.message || 'Failed to send verification code');
+        setError(otpData.message || 'No pudimos enviarte el código');
       }
     } catch (_e) {
-      setError('Something went wrong. Please try again.');
+      setError('Algo salió mal. Intenta de nuevo.');
     } finally {
       setLoading(false);
     }
@@ -64,7 +64,7 @@ export default function LoginPage() {
   const handleVerifyOTP = async (e: React.FormEvent) => {
     e.preventDefault();
     if (otp.length < 6) {
-      setError('Please enter the full 6-digit code');
+      setError('Escribe los 6 dígitos completos');
       return;
     }
     setError('');
@@ -91,7 +91,7 @@ export default function LoginPage() {
         setError(data.error || 'Invalid verification code');
       }
     } catch (_e) {
-      setError('Verification failed. Please try again.');
+      setError('No pudimos verificar el código. Intenta de nuevo.');
     } finally {
       setLoading(false);
     }
@@ -110,12 +110,12 @@ export default function LoginPage() {
       });
 
       if (res.ok) {
-        setMessage('A new verification code has been sent.');
+        setMessage('Te enviamos un código nuevo.');
       } else {
-        setError('Failed to resend code. Please try again.');
+        setError('No pudimos reenviar el código. Intenta de nuevo.');
       }
     } catch (_e) {
-      setError('Failed to resend code.');
+      setError('No pudimos reenviar el código.');
     } finally {
       setLoading(false);
     }
@@ -177,7 +177,7 @@ export default function LoginPage() {
                     ) : (
                       <Mail className="mr-2 h-4 w-4" />
                     )}
-                    {loading ? 'Sending code...' : 'Continue with Email'}
+                    {loading ? 'Sending code...' : 'Continuar con mi correo'}
                   </Button>
                 </CardFooter>
               </form>
@@ -237,7 +237,7 @@ export default function LoginPage() {
                     ) : (
                       <ShieldCheck className="mr-2 h-4 w-4" />
                     )}
-                    {loading ? 'Verifying...' : 'Verify & Sign in'}
+                    {loading ? 'Verifying...' : 'Verificar y entrar'}
                   </Button>
                   <div className="flex items-center justify-between w-full">
                     <Button
