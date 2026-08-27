@@ -3,7 +3,7 @@ declare namespace NodeJs {
         JWT_SECRET: string;
         DATABASE_URL: string;
         RESEND_API_KEY: string;
-        NEXT_PUBLIC_APP_URL: string;
+        NEXT_PUBLIC_APP_URL?: string;
     }
 }
 

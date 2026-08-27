@@ -1,4 +1,5 @@
 import { Resend } from 'resend';
+import { APP_URL } from '@/lib/config';
 
 // Initialize Resend with API key only when needed (server-side)
 let resendInstance: Resend | null = null;
@@ -277,7 +278,7 @@ class EmailService {
         </div>
         
         <div style="text-align: center;">
-          <a href="${process.env.NEXT_PUBLIC_APP_URL}/admin" class="button">Review Referral</a>
+          <a href="${APP_URL}/admin" class="button">Review Referral</a>
         </div>
         
         <p>Please review this referral in the admin dashboard and approve or reject it accordingly.</p>
@@ -332,7 +333,7 @@ class EmailService {
         `}
         
         <div style="text-align: center;">
-          <a href="${process.env.NEXT_PUBLIC_APP_URL}/affiliate" class="button">View Dashboard</a>
+          <a href="${APP_URL}/affiliate" class="button">View Dashboard</a>
         </div>
         
         <p>Best regards,<br>The Refferq Team</p>
@@ -379,7 +380,7 @@ class EmailService {
         `}
         
         <div style="text-align: center;">
-          <a href="${process.env.NEXT_PUBLIC_APP_URL}/affiliate" class="button">View Dashboard</a>
+          <a href="${APP_URL}/affiliate" class="button">View Dashboard</a>
         </div>
         
         <p>Thank you for being a valued affiliate partner!</p>
@@ -427,7 +428,7 @@ class EmailService {
         <p>The commission for this conversion has been added to your pending earnings.</p>
         
         <div style="text-align: center;">
-          <a href="${process.env.NEXT_PUBLIC_APP_URL}/affiliate" class="button">View Your Dashboard</a>
+          <a href="${APP_URL}/affiliate" class="button">View Your Dashboard</a>
         </div>
         
         <p>Keep up the fantastic work!</p>
@@ -503,7 +504,7 @@ class EmailService {
           <p>This commission is currently <strong>pending</strong> and will be included in your next payout.</p>
           
           <div style="text-align: center;">
-            <a href="${process.env.NEXT_PUBLIC_APP_URL}/affiliate" class="button">View Your Dashboard</a>
+            <a href="${APP_URL}/affiliate" class="button">View Your Dashboard</a>
           </div>
           
           <p style="margin-top: 30px; color: #666; font-size: 14px;">
@@ -598,7 +599,7 @@ class EmailService {
   }
 
   async sendPasswordResetEmail(email: string, resetToken: string): Promise<{ success: boolean; message: string }> {
-    const resetUrl = `${process.env.NEXT_PUBLIC_APP_URL}/reset-password?token=${resetToken}`;
+    const resetUrl = `${APP_URL}/reset-password?token=${resetToken}`;
     return this.sendTemplatedEmail({
       to: email,
       templateType: 'PASSWORD_RESET',
@@ -651,7 +652,7 @@ class EmailService {
   }
 
   async sendVerificationEmail(email: string, verificationToken: string): Promise<{ success: boolean; message: string }> {
-    const verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL}/verify-email?token=${verificationToken}`;
+    const verificationUrl = `${APP_URL}/verify-email?token=${verificationToken}`;
     return this.sendTemplatedEmail({
       to: email,
       templateType: 'EMAIL_VERIFICATION',
@@ -782,7 +783,7 @@ class EmailService {
           </div>
           
           <div style="text-align: center;">
-            <a href="${process.env.NEXT_PUBLIC_APP_URL}/affiliate" class="button">View Payout Status</a>
+            <a href="${APP_URL}/affiliate" class="button">View Payout Status</a>
           </div>
           
           <p style="margin-top: 30px; color: #666; font-size: 14px;">
@@ -869,7 +870,7 @@ class EmailService {
           </div>
           
           <div style="text-align: center;">
-            <a href="${process.env.NEXT_PUBLIC_APP_URL}/affiliate" class="button">View Dashboard</a>
+            <a href="${APP_URL}/affiliate" class="button">View Dashboard</a>
           </div>
           
           <p style="margin-top: 30px; text-align: center; color: #666; font-size: 14px;">

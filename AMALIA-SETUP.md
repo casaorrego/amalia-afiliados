@@ -20,17 +20,22 @@ Los **referidos entre pacientes** NO pasan por acá — viven en
 
 ## Variables de entorno (Vercel)
 
-| Variable | Valor | Obligatoria |
-|---|---|---|
-| `DATABASE_URL` | Conexión de Supabase **con `?schema=refferq`** (usar el *session pooler* y `sslmode=require`) | Sí |
-| `JWT_SECRET` | Mínimo 32 caracteres. Generar con `openssl rand -base64 32` | Sí |
-| `LOOPS_API_KEY` | API key de Loops | Sí — **sin esto nadie puede entrar** |
-| `NEXT_PUBLIC_APP_URL` | `https://afiliados.somosamalia.com` | Sí |
-| `ADMIN_EMAILS` | Correos que reciben avisos de referida nueva | No |
+Solo tres, y las tres son secretas o propias de la instancia:
 
-⚠️ El `?schema=refferq` es lo que mantiene las 28 tablas del portal
-aisladas de `public`. Sin ese parámetro, Prisma las crea encima de la
-base de pacientes.
+| Variable | Valor |
+|---|---|
+| `DATABASE_URL` | Conexión de Supabase tal cual (session pooler) |
+| `JWT_SECRET` | Mínimo 32 caracteres. `openssl rand -base64 32` |
+| `LOOPS_API_KEY` | API key de Loops — **sin esto nadie puede entrar** |
+
+Todo lo demás va quemado en `src/lib/config.ts`, porque no son secretos
+y no cambian entre despliegues: el dominio del portal y el schema de
+Postgres. Mismo criterio que en los triggers de amalia-app.
+
+⚠️ Las 28 tablas del portal viven en el schema `refferq`, aisladas de la
+base de pacientes. **No hace falta poner `?schema=refferq` en la URL**:
+`src/lib/prisma.ts` lo impone sobre la connection string, justamente
+para que no dependa de que nadie lo olvide al pegar la variable.
 
 ## Correo en Loops
 
@@ -46,8 +51,11 @@ de entorno con el id: basta con que el nombre coincida.
 ## Puesta en marcha
 
 1. En Supabase: `create schema if not exists refferq;`
-2. `npx prisma db push` con el `DATABASE_URL` apuntando a ese schema —
-   crea las 28 tablas.
+2. Crear las 28 tablas — el CLI de Prisma lee la URL cruda, así que el
+   parámetro se pasa en la invocación:
+   ```
+   DATABASE_URL="$(grep ^DATABASE_URL .env.local | cut -d'"' -f2)?schema=refferq" npx prisma db push
+   ```
 3. Proyecto en Vercel con las variables de arriba.
 4. DNS: `CNAME afiliados → cname.vercel-dns.com`
 5. Registrarse en `/register`. **Ojo:** el portal bloquea a propósito

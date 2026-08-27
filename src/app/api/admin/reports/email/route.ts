@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { resend } from '@/lib/email';
+import { APP_URL } from '@/lib/config';
 
 async function verifyAdmin(request: NextRequest) {
   try {
@@ -75,7 +76,7 @@ export async function POST(request: NextRequest) {
         ${reportData.data && reportData.data.length > 0 ? renderTableHTML(reportData.data.slice(0, 20)) : ''}
         ${reportData.data && reportData.data.length > 20 ? `<p style="color: #888; font-size: 13px;">Showing 20 of ${reportData.data.length} records. Full data attached as CSV.</p>` : ''}
         <p style="margin-top: 20px;">
-          <a href="${process.env.NEXT_PUBLIC_APP_URL}/admin/reports" style="display: inline-block; background: #667eea; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px;">
+          <a href="${APP_URL}/admin/reports" style="display: inline-block; background: #667eea; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px;">
             View Full Report
           </a>
         </p>

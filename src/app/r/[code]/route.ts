@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { APP_URL } from '@/lib/config';
 
 // ─── Open Redirect Protection ─────────────────────────────────
 function isAllowedRedirectUrl(url: string, appUrl: string, websiteUrl?: string): boolean {
@@ -40,7 +41,7 @@ export async function GET(
     const { code } = await params;
     const referralCode = code;
     const searchParams = request.nextUrl.searchParams;
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://app.refferq.com';
+    const appUrl = APP_URL;
 
     // Support both 'target' and 'dest' (Plan called it 'dest')
     const rawTarget = searchParams.get('dest') || searchParams.get('target');
@@ -167,7 +168,7 @@ export async function GET(
     console.error('Referral tracking error:', error);
 
     // Fallback redirect on error (safe — always redirects to app URL)
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://app.refferq.com';
+    const appUrl = APP_URL;
     return NextResponse.redirect(appUrl);
   }
 }

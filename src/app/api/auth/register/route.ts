@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { emailService } from '@/lib/email';
 import { checkRateLimit } from '@/lib/rate-limit';
+import { APP_URL } from '@/lib/config';
 
 export async function POST(request: NextRequest) {
   try {
@@ -61,7 +62,7 @@ export async function POST(request: NextRequest) {
     // Send welcome email (non-blocking - don't fail registration if email fails)
     try {
       // Send welcome email with login URL
-      const loginUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://app.refferq.com'}/login`;
+      const loginUrl = `${APP_URL}/login`;
       await emailService.sendWelcomeEmail({
         name: result.user!.name,
         email: result.user!.email,
