@@ -63,6 +63,12 @@ export async function GET(request: NextRequest) {
     const totalCommissions = commissions.length;
     const pendingCommissionsCount = pendingCommissionsList.length;
     const totalConversions = conversions.length;
+    // La fila contenedora de clics (ver /api/track/click) NO es una
+    // referida: sus clics sí cuentan, pero no debe aparecer en la lista
+    // ni sumar al total de referidas.
+    const esBucket = (r: { leadEmail?: string | null }) =>
+      (r.leadEmail || '').endsWith('@clics.internal');
+
     const totalClicks = referrals.reduce((sum, r) => {
       const metadata = r.metadata as any;
       return sum + (metadata?.clicks || 0);
@@ -119,7 +125,7 @@ export async function GET(request: NextRequest) {
       },
       affiliate: affiliate,
       stats,
-      referrals: mappedReferrals,
+      referrals: mappedReferrals.filter((r: { leadEmail?: string | null }) => !esBucket(r)),
       conversions,
       commissions,
       currencySymbol,
