@@ -77,21 +77,19 @@ export class OTPService {
         }
       });
 
-      // Send OTP email
-      const { Resend } = await import('resend');
-      const resendClient = new Resend(process.env.RESEND_API_KEY);
-      const emailResult = await resendClient.emails.send({
-        from: process.env.RESEND_FROM_EMAIL!,
-        to: email,
-        subject: 'Your Login Code',
-        html: this.generateOTPEmailTemplate(code, user.name || 'User')
-      });
+      // El código va por LOOPS, no por Resend: Amalia manda todo su
+      // correo por ahí (mismo remitente y dominio verificado), y la
+      // plantilla se diseña en su editor visual — cero HTML acá. Este
+      // es el ÚNICO canal de login del portal: si Loops falla, nadie
+      // entra, así que el error se propaga en vez de tragarse.
+      const { sendOtpEmail } = await import('@/lib/loops');
+      const emailResult = await sendOtpEmail(email, code, user.name || '');
 
-      if (emailResult.error) {
-        console.error('Failed to send OTP email:', emailResult.error);
+      if (!emailResult.ok) {
+        console.error('[otp] Loops no pudo mandar el código:', emailResult.error);
         return {
           success: false,
-          message: 'Failed to send OTP email. Please try again.'
+          message: 'No pudimos enviarte el código. Intenta de nuevo.'
         };
       }
 
@@ -224,106 +222,6 @@ export class OTPService {
   }
 
   // Generate OTP email template
-  private generateOTPEmailTemplate(code: string, userName: string): string {
-    return `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <meta charset="utf-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Your Login Code</title>
-          <style>
-            body {
-              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-              line-height: 1.6;
-              color: #333;
-              max-width: 600px;
-              margin: 0 auto;
-              padding: 20px;
-              background-color: #f8f9fa;
-            }
-            .container {
-              background-color: white;
-              padding: 40px;
-              border-radius: 8px;
-              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            }
-            .header {
-              text-align: center;
-              margin-bottom: 30px;
-            }
-            .logo {
-              font-size: 24px;
-              font-weight: bold;
-              color: #2563eb;
-              margin-bottom: 10px;
-            }
-            .otp-code {
-              background-color: #f3f4f6;
-              border: 2px dashed #d1d5db;
-              padding: 20px;
-              text-align: center;
-              margin: 30px 0;
-              border-radius: 8px;
-            }
-            .code {
-              font-size: 36px;
-              font-weight: bold;
-              letter-spacing: 8px;
-              color: #1f2937;
-              font-family: 'Courier New', monospace;
-            }
-            .warning {
-              background-color: #fef3c7;
-              border-left: 4px solid #f59e0b;
-              padding: 15px;
-              margin: 20px 0;
-              border-radius: 4px;
-            }
-            .footer {
-              text-align: center;
-              margin-top: 30px;
-              font-size: 14px;
-              color: #6b7280;
-            }
-          </style>
-        </head>
-        <body>
-          <div class="container">
-            <div class="header">
-              <div class="logo">${process.env.PLATFORM_NAME || 'Affiliate Platform'}</div>
-              <h1>Your Login Code</h1>
-            </div>
-            
-            <p>Hello ${userName},</p>
-            <p>You requested to sign in to your account. Please use the verification code below:</p>
-            
-            <div class="otp-code">
-              <div class="code">${code}</div>
-              <p style="margin: 10px 0 0 0; color: #6b7280;">This code expires in 10 minutes</p>
-            </div>
-            
-            <div class="warning">
-              <strong>Security Notice:</strong> Never share this code with anyone. Our team will never ask for your verification code.
-            </div>
-            
-            <p>If you didn't request this code, please ignore this email or contact our support team if you have concerns.</p>
-            
-            <div class="footer">
-              <p>Best regards,<br>
-              ${process.env.PLATFORM_NAME || 'Affiliate Platform'} Team</p>
-              <p>
-                Need help? Contact us at 
-                <a href="mailto:${process.env.PLATFORM_SUPPORT_EMAIL}" style="color: #2563eb;">
-                  ${process.env.PLATFORM_SUPPORT_EMAIL}
-                </a>
-              </p>
-            </div>
-          </div>
-        </body>
-      </html>
-    `;
-  }
 }
 
 export const otpService = new OTPService();
