@@ -100,8 +100,17 @@ export async function GET(request: NextRequest) {
     const { getCurrencySymbol } = await import('@/lib/currency');
     const currencySymbol = await getCurrencySymbol();
 
+    // Regla de comisión vigente: el banner del panel la muestra. Antes
+    // decía "20%" escrito a mano, que no salía de ningún lado y era
+    // falso — el programa paga un monto fijo.
+    const regla = await prisma.commissionRule.findFirst({
+      where: { isDefault: true, isActive: true },
+      select: { type: true, value: true },
+    });
+
     return NextResponse.json({
       success: true,
+      comision: regla ? { tipo: regla.type, valor: regla.value } : null,
       user: {
         id: user.id,
         name: user.name,

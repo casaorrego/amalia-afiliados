@@ -82,6 +82,7 @@ export default function AffiliateDashboard() {
   const [stats, setStats] = useState<AffiliateStats | null>(null);
   const [referrals, setReferrals] = useState<Referral[]>([]);
   const [currencySymbol, setCurrencySymbol] = useState(CURRENCY_SYMBOL);
+  const [comision, setComision] = useState<{ tipo: string; valor: number } | null>(null);
   const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [copied, setCopied] = useState<'link' | 'code' | null>(null);
@@ -214,7 +215,13 @@ export default function AffiliateDashboard() {
                 <span className="text-2xl font-bold">{currencySymbol}</span>
               </div>
               <div>
-                <p className="text-sm text-white/90 font-medium tracking-wide">Gana 20% de comisión por cada paciente que pague</p>
+                <p className="text-sm text-white/90 font-medium tracking-wide">
+                  {comision
+                    ? comision.tipo === 'FIXED'
+                      ? `Gana ${formatPesos(comision.valor)} por cada paciente que llegue a su segundo mes`
+                      : `Gana ${comision.valor}% por cada paciente que llegue a su segundo mes`
+                    : 'Gana una comisión por cada paciente que llegue a su segundo mes'}
+                </p>
                 <p className="text-xl font-bold mt-1 tracking-tight">Empieza hoy a referir y a ganar</p>
               </div>
             </div>
