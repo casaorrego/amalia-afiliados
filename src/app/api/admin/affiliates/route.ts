@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { name, email, password, payoutMethod, paypalEmail } = data;
+    const { name, email, password, payoutMethod, paypalEmail, sendWelcomeEmail } = data;
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
@@ -140,6 +140,23 @@ export async function POST(request: NextRequest) {
         }
       }
     });
+
+    // Bienvenida. El portal es solo por invitacion, asi que si esto no
+    // sale la afiliada nunca se entera de que tiene cuenta. Antes no se
+    // mandaba NADA — la casilla del formulario era decorativa.
+    // Best-effort: un fallo de correo no debe tumbar la creacion.
+    if (sendWelcomeEmail !== false) {
+      const { sendBienvenidaEmail } = await import('@/lib/loops');
+      const { APP_URL } = await import('@/lib/config');
+      const r = await sendBienvenidaEmail({
+        email,
+        nombre: (name || '').trim().split(/\s+/)[0] || '',
+        codigo: affiliate.referralCode,
+        link: `https://somosamalia.com/?ref=${affiliate.referralCode}`,
+        entrar: `${APP_URL}/login`,
+      });
+      if (!r.ok) console.error('[afiliadas] bienvenida no salio:', r.error);
+    }
 
     return NextResponse.json({
       success: true,

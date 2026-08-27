@@ -31,6 +31,10 @@ export interface LoopsResult {
 // que crees en el dashboard. Variables que espera: {codigo}, {nombre}.
 export const OTP_EMAIL_NAME = "afiliados_codigo_acceso";
 
+// Bienvenida al crear una afiliada desde el admin. Variables:
+// {nombre}, {codigo}, {link}, {entrar}.
+export const BIENVENIDA_EMAIL_NAME = "afiliados_bienvenida";
+
 // ── Resolución por nombre ─────────────────────────────────────────
 // Loops solo acepta transactionalId al enviar, pero el listado devuelve
 // {id, name}. Se cachea en memoria: la content API tiene un tope de
@@ -129,6 +133,24 @@ export async function sendTransactionalByName(
     return { ok: false, error: `transactional "${name}" no encontrado en Loops` };
   }
   return sendTransactional(id, email, dataVariables);
+}
+
+/** Bienvenida: le avisa a la afiliada que su cuenta está lista, con su
+ *  código y su link. No lleva contraseña porque no hay — entra con el
+ *  código de 6 dígitos que le llega al pedir acceso. */
+export async function sendBienvenidaEmail(args: {
+  email: string;
+  nombre: string;
+  codigo: string;
+  link: string;
+  entrar: string;
+}): Promise<LoopsResult> {
+  return sendTransactionalByName(BIENVENIDA_EMAIL_NAME, args.email, {
+    nombre: args.nombre,
+    codigo: args.codigo,
+    link: args.link,
+    entrar: args.entrar,
+  });
 }
 
 /** Código de acceso del portal (login sin contraseña). */

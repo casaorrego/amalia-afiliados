@@ -20,6 +20,7 @@ export const affiliateCreateSchema = z.object({
     // Colombia suele ser un numero de Nequi o una cuenta bancaria.
     payoutMethod: z.string().optional(),
     paypalEmail: z.string().optional(),
+    sendWelcomeEmail: z.boolean().optional(),
 });
 
 // Payout Validation

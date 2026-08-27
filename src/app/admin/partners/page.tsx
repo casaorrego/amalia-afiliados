@@ -219,8 +219,11 @@ export default function PartnersPage() {
       const data = await response.json();
 
       if (data.success) {
+        // Sin contrasena: el login del portal es por codigo al correo,
+        // asi que la que generaba el backend no sirve para nada y solo
+        // confundia. Se le manda un correo de bienvenida automatico.
         alert(
-          `Partner created successfully!\n\nName: ${data.affiliate.name}\nEmail: ${data.affiliate.email}\nReferral Code: ${data.affiliate.referralCode}\nPassword: ${data.password}\n\nPlease save and share this with the partner.`
+          `Partner created.\n\nName: ${data.affiliate.name}\nEmail: ${data.affiliate.email}\nReferral code: ${data.affiliate.referralCode}\n\nA welcome email with their code and link was sent.`
         );
         setShowCreateModal(false);
         setNewPartner({
