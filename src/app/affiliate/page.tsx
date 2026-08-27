@@ -122,6 +122,7 @@ export default function AffiliateDashboard() {
           currencySymbol: data.currencySymbol || CURRENCY_SYMBOL,
           nextMaturesAt: data.stats?.nextMaturesAt || null,
         });
+        setComision(data.comision ?? null);
         setReferrals(data.referrals || []);
         setCurrencySymbol(data.currencySymbol || CURRENCY_SYMBOL);
       }
