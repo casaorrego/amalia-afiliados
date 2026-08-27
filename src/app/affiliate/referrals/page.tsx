@@ -162,7 +162,7 @@ export default function ReferralsPage() {
   };
 
   const exportCSV = () => {
-    const headers = ['Name', 'Email', 'Company', 'Status', 'Value', 'Date'];
+    const headers = ['Nombre', 'Correo', 'Empresa', 'Estado', 'Valor', 'Fecha'];
     const rows = filteredReferrals.map((r) => [
       r.leadName,
       r.leadEmail,
@@ -204,12 +204,12 @@ export default function ReferralsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Referrals</h1>
-          <p className="text-muted-foreground">Track and manage your referral submissions</p>
+          <h1 className="text-2xl font-bold tracking-tight">Referidas</h1>
+          <p className="text-muted-foreground">Consulta y administra tus referidas</p>
         </div>
         <Button onClick={() => setShowSubmitModal(true)} className="gap-1.5">
           <Plus className="h-4 w-4" />
-          Submit Lead
+          Registrar referida
         </Button>
       </div>
 
@@ -223,19 +223,19 @@ export default function ReferralsPage() {
         </Card>
         <Card>
           <CardContent className="p-4">
-            <p className="text-sm text-muted-foreground">Pending</p>
+            <p className="text-sm text-muted-foreground">Pendiente</p>
             <p className="text-2xl font-bold text-amber-600">{stats.pending}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
-            <p className="text-sm text-muted-foreground">Approved</p>
+            <p className="text-sm text-muted-foreground">Aprobado</p>
             <p className="text-2xl font-bold text-emerald-600">{stats.approved}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
-            <p className="text-sm text-muted-foreground">Rejected</p>
+            <p className="text-sm text-muted-foreground">Rechazado</p>
             <p className="text-2xl font-bold text-red-600">{stats.rejected}</p>
           </CardContent>
         </Card>
@@ -246,7 +246,7 @@ export default function ReferralsPage() {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Search by name or email..."
+            placeholder="Buscar por nombre o correo..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10"
@@ -258,15 +258,15 @@ export default function ReferralsPage() {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="ALL">All Status</SelectItem>
-            <SelectItem value="PENDING">Pending</SelectItem>
-            <SelectItem value="APPROVED">Approved</SelectItem>
-            <SelectItem value="REJECTED">Rejected</SelectItem>
+            <SelectItem value="ALL">Todos los estados</SelectItem>
+            <SelectItem value="PENDING">Pendiente</SelectItem>
+            <SelectItem value="APPROVED">Aprobado</SelectItem>
+            <SelectItem value="REJECTED">Rechazado</SelectItem>
           </SelectContent>
         </Select>
         <Button variant="outline" onClick={exportCSV} className="gap-1.5">
           <Download className="h-4 w-4" />
-          Export CSV
+          Exportar CSV
         </Button>
       </div>
 
@@ -276,24 +276,24 @@ export default function ReferralsPage() {
           {filteredReferrals.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 text-center">
               <Users className="h-12 w-12 text-muted-foreground/40 mb-3" />
-              <p className="font-medium">No referrals found</p>
+              <p className="font-medium">No hay referidas</p>
               <p className="mt-1 text-sm text-muted-foreground">
                 {referrals.length === 0 ? 'Start submitting leads to earn commissions' : 'Try adjusting your filters'}
               </p>
               {referrals.length === 0 && (
-                <Button className="mt-4" onClick={() => setShowSubmitModal(true)}>Submit your first lead</Button>
+                <Button className="mt-4" onClick={() => setShowSubmitModal(true)}>Registra tu primera referida</Button>
               )}
             </div>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Lead Name</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Company</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead className="text-right">Est. Value</TableHead>
+                  <TableHead>Nombre de la referida</TableHead>
+                  <TableHead>Correo</TableHead>
+                  <TableHead>Empresa</TableHead>
+                  <TableHead>Estado</TableHead>
+                  <TableHead>Fecha</TableHead>
+                  <TableHead className="text-right">Valor est.</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -319,9 +319,9 @@ export default function ReferralsPage() {
       <Dialog open={showSubmitModal} onOpenChange={setShowSubmitModal}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Submit Lead</DialogTitle>
+            <DialogTitle>Registrar referida</DialogTitle>
             <DialogDescription>
-              Enter the details below to submit a lead.
+              Llena los datos para registrar una referida.
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmitLead} className="space-y-4">
@@ -331,7 +331,7 @@ export default function ReferralsPage() {
                 required
                 value={submitForm.leadName}
                 onChange={(e) => setSubmitForm({ ...submitForm, leadName: e.target.value })}
-                placeholder="Full name"
+                placeholder="Nombre completo"
               />
             </div>
             <div className="space-y-2">
@@ -341,7 +341,7 @@ export default function ReferralsPage() {
                 required
                 value={submitForm.leadEmail}
                 onChange={(e) => setSubmitForm({ ...submitForm, leadEmail: e.target.value })}
-                placeholder="email@example.com"
+                placeholder="nombre@correo.com"
               />
             </div>
             <div className="space-y-2">
@@ -353,10 +353,10 @@ export default function ReferralsPage() {
                 onChange={(e) => setSubmitForm({ ...submitForm, estimatedValue: e.target.value })}
                 placeholder="0"
               />
-              <p className="text-xs text-muted-foreground">Type 0 if unsure</p>
+              <p className="text-xs text-muted-foreground">Escribe 0 si no sabes</p>
             </div>
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => setShowSubmitModal(false)}>Cancel</Button>
+              <Button type="button" variant="outline" onClick={() => setShowSubmitModal(false)}>Cancelar</Button>
               <Button type="submit" disabled={submitLoading}>
                 {submitLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Submit Lead

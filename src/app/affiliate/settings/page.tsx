@@ -49,7 +49,7 @@ export default function SettingsPage() {
     company: '',
     email: '',
     country: 'India',
-    paymentMethod: 'PayPal',
+    paymentMethod: 'Nequi',
     paymentEmail: '',
   });
 
@@ -70,7 +70,7 @@ export default function SettingsPage() {
           company: pd.company || '',
           email: data.user?.email || user?.email || '',
           country: pd.country || 'India',
-          paymentMethod: pd.paymentMethod || 'PayPal',
+          paymentMethod: pd.paymentMethod || 'Nequi',
           paymentEmail: pd.paymentEmail || data.user?.email || '',
         });
       }
@@ -147,8 +147,8 @@ export default function SettingsPage() {
       )}
 
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Settings</h1>
-        <p className="text-muted-foreground">Manage your account and payment preferences</p>
+        <h1 className="text-2xl font-bold tracking-tight">Ajustes</h1>
+        <p className="text-muted-foreground">Administra tu cuenta y cómo te pagamos</p>
       </div>
 
       {/* Referral Code */}
@@ -156,9 +156,9 @@ export default function SettingsPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">
             <Key className="h-4 w-4" />
-            Referral Code
+            Tu código
           </CardTitle>
-          <CardDescription>Your unique referral identifier</CardDescription>
+          <CardDescription>Tu identificador único de referida</CardDescription>
         </CardHeader>
         <CardContent>
           {referralCode ? (
@@ -170,8 +170,8 @@ export default function SettingsPage() {
             </div>
           ) : (
             <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">No referral code generated yet.</p>
-              <Button onClick={handleGenerateCode}>Generate Code</Button>
+              <p className="text-sm text-muted-foreground">Todavía no has generado tu código.</p>
+              <Button onClick={handleGenerateCode}>Generar código</Button>
             </div>
           )}
         </CardContent>
@@ -182,46 +182,46 @@ export default function SettingsPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">
             <User className="h-4 w-4" />
-            Personal Details
+            Datos personales
           </CardTitle>
-          <CardDescription>Manage your account information</CardDescription>
+          <CardDescription>Administra los datos de tu cuenta</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div className="space-y-2">
               <Label className="flex items-center gap-1.5">
-                <User className="h-3.5 w-3.5" /> Full Name
+                <User className="h-3.5 w-3.5" /> Nombre completo
               </Label>
               <Input
                 value={settingsForm.name}
                 onChange={(e) => setSettingsForm({ ...settingsForm, name: e.target.value })}
-                placeholder="John Doe"
+                placeholder="María Gómez"
               />
             </div>
             <div className="space-y-2">
               <Label className="flex items-center gap-1.5">
-                <Building2 className="h-3.5 w-3.5" /> Company
+                <Building2 className="h-3.5 w-3.5" /> Empresa
               </Label>
               <Input
                 value={settingsForm.company}
                 onChange={(e) => setSettingsForm({ ...settingsForm, company: e.target.value })}
-                placeholder="Company Name"
+                placeholder="Nombre de la empresa"
               />
             </div>
             <div className="space-y-2">
               <Label className="flex items-center gap-1.5">
-                <Mail className="h-3.5 w-3.5" /> Email
+                <Mail className="h-3.5 w-3.5" /> Correo
               </Label>
               <Input
                 type="email"
                 value={settingsForm.email}
                 onChange={(e) => setSettingsForm({ ...settingsForm, email: e.target.value })}
-                placeholder="john@example.com"
+                placeholder="nombre@correo.com"
               />
             </div>
             <div className="space-y-2">
               <Label className="flex items-center gap-1.5">
-                <Globe className="h-3.5 w-3.5" /> Country
+                <Globe className="h-3.5 w-3.5" /> País
               </Label>
               <Select
                 value={settingsForm.country}
@@ -230,14 +230,14 @@ export default function SettingsPage() {
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="India">India</SelectItem>
-                  <SelectItem value="USA">United States</SelectItem>
-                  <SelectItem value="UK">United Kingdom</SelectItem>
-                  <SelectItem value="Canada">Canada</SelectItem>
+                  <SelectItem value="USA">Estados Unidos</SelectItem>
+                  <SelectItem value="UK">Reino Unido</SelectItem>
+                  <SelectItem value="Canadá">Canadá</SelectItem>
                   <SelectItem value="Australia">Australia</SelectItem>
-                  <SelectItem value="Germany">Germany</SelectItem>
-                  <SelectItem value="France">France</SelectItem>
-                  <SelectItem value="Singapore">Singapore</SelectItem>
-                  <SelectItem value="UAE">UAE</SelectItem>
+                  <SelectItem value="Alemania">Alemania</SelectItem>
+                  <SelectItem value="Francia">Francia</SelectItem>
+                  <SelectItem value="Singapur">Singapur</SelectItem>
+                  <SelectItem value="Emiratos Árabes">Emiratos Árabes</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -250,35 +250,35 @@ export default function SettingsPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">
             <CreditCard className="h-4 w-4" />
-            Payment Details
+            Datos de pago
           </CardTitle>
-          <CardDescription>Configure how you receive payouts</CardDescription>
+          <CardDescription>Configura cómo recibes tus pagos</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div className="space-y-2">
-              <Label>Payment Method</Label>
+              <Label>Método de pago</Label>
               <Select
                 value={settingsForm.paymentMethod}
                 onValueChange={(v) => setSettingsForm({ ...settingsForm, paymentMethod: v })}
               >
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="PayPal">PayPal</SelectItem>
-                  <SelectItem value="Bank Transfer">Bank Transfer</SelectItem>
-                  <SelectItem value="Stripe">Stripe</SelectItem>
-                  <SelectItem value="Wise">Wise</SelectItem>
-                  <SelectItem value="Wire Transfer">Wire Transfer</SelectItem>
-                  <SelectItem value="UPI">UPI</SelectItem>
+                  {/* Medios de pago que existen en Colombia. El upstream
+                      traía PayPal, Stripe, Wise y UPI (India), inservibles
+                      para pagarle a una afiliada acá. */}
+                  <SelectItem value="Nequi">Nequi</SelectItem>
+                  <SelectItem value="Daviplata">Daviplata</SelectItem>
+                  <SelectItem value="Transferencia bancaria">Transferencia bancaria</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>Payment Email / Account</Label>
+              <Label>Correo o cuenta de pago</Label>
               <Input
                 value={settingsForm.paymentEmail}
                 onChange={(e) => setSettingsForm({ ...settingsForm, paymentEmail: e.target.value })}
-                placeholder="payment@example.com"
+                placeholder="nombre@correo.com"
               />
             </div>
           </div>

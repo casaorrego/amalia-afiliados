@@ -126,9 +126,9 @@ export default function ResourcesPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Resources</h1>
+        <h1 className="text-2xl font-bold tracking-tight">Material</h1>
         <p className="text-muted-foreground">
-          Download marketing materials, banners, and promotional assets
+          Descarga piezas gráficas y material para promocionar
         </p>
       </div>
 
@@ -141,7 +141,7 @@ export default function ResourcesPage() {
             </div>
             <div>
               <p className="text-2xl font-bold">{resources.length}</p>
-              <p className="text-xs text-muted-foreground">Total Resources</p>
+              <p className="text-xs text-muted-foreground">Piezas disponibles</p>
             </div>
           </CardContent>
         </Card>
@@ -152,7 +152,7 @@ export default function ResourcesPage() {
             </div>
             <div>
               <p className="text-2xl font-bold">{resources.filter((r) => ['BANNER', 'LOGO', 'SOCIAL_POST'].includes(r.type)).length}</p>
-              <p className="text-xs text-muted-foreground">Visual Assets</p>
+              <p className="text-xs text-muted-foreground">Piezas gráficas</p>
             </div>
           </CardContent>
         </Card>
@@ -163,7 +163,7 @@ export default function ResourcesPage() {
             </div>
             <div>
               <p className="text-2xl font-bold">{resources.reduce((sum, r) => sum + r.downloads, 0)}</p>
-              <p className="text-xs text-muted-foreground">Total Downloads</p>
+              <p className="text-xs text-muted-foreground">Descargas</p>
             </div>
           </CardContent>
         </Card>
@@ -174,7 +174,7 @@ export default function ResourcesPage() {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Search resources..."
+            placeholder="Buscar material..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10"
@@ -199,7 +199,7 @@ export default function ResourcesPage() {
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-16 text-center">
             <FolderOpen className="h-12 w-12 text-muted-foreground/40 mb-3" />
-            <p className="font-medium">No resources found</p>
+            <p className="font-medium">No hay material disponible</p>
             <p className="mt-1 text-sm text-muted-foreground">
               {resources.length === 0
                 ? 'Marketing resources will appear here once uploaded by the admin team'
@@ -244,11 +244,11 @@ export default function ResourcesPage() {
                         onClick={() => window.open(resource.fileUrl, '_blank')}
                       >
                         <ExternalLink className="h-3.5 w-3.5 mr-1" />
-                        Preview
+                        Vista previa
                       </Button>
                       <Button size="sm" onClick={() => handleDownload(resource)}>
                         <Download className="h-3.5 w-3.5 mr-1" />
-                        Download
+                        Descargar
                       </Button>
                     </div>
                   </div>

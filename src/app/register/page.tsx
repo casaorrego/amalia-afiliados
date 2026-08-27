@@ -152,9 +152,9 @@ export default function RegisterPage() {
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary shadow-lg shadow-primary/25">
             <Target className="h-7 w-7 text-primary-foreground" />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight">Refferq</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Amalia</h1>
           <p className="text-sm text-muted-foreground">
-            Affiliate Marketing Platform
+            Portal de afiliadas
           </p>
         </div>
 
@@ -163,9 +163,9 @@ export default function RegisterPage() {
           {step === 'details' && (
             <>
               <CardHeader className="text-center pb-4">
-                <CardTitle className="text-xl">Create your account</CardTitle>
+                <CardTitle className="text-xl">Crea tu cuenta</CardTitle>
                 <CardDescription>
-                  Join as an affiliate partner and start earning
+                  Únete como afiliada y empieza a ganar
                 </CardDescription>
               </CardHeader>
               <form onSubmit={handleRegister}>
@@ -176,13 +176,13 @@ export default function RegisterPage() {
                     </Alert>
                   )}
                   <div className="space-y-2">
-                    <Label htmlFor="name">Full Name</Label>
+                    <Label htmlFor="name">Nombre completo</Label>
                     <div className="relative">
                       <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
                         id="name"
                         type="text"
-                        placeholder="Your name"
+                        placeholder="Tu nombre"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         className="pl-10"
@@ -193,13 +193,13 @@ export default function RegisterPage() {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email address</Label>
+                    <Label htmlFor="email">Correo electrónico</Label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
                         id="email"
                         type="email"
-                        placeholder="you@example.com"
+                        placeholder="nombre@correo.com"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="pl-10"
@@ -232,9 +232,9 @@ export default function RegisterPage() {
                 <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
                   <ShieldCheck className="h-6 w-6 text-primary" />
                 </div>
-                <CardTitle className="text-xl">Verify your email</CardTitle>
+                <CardTitle className="text-xl">Verifica tu correo</CardTitle>
                 <CardDescription>
-                  Enter the 6-digit code sent to <span className="font-medium text-foreground">{email}</span>
+                  Escribe el código de 6 dígitos que enviamos a <span className="font-medium text-foreground">{email}</span>
                 </CardDescription>
               </CardHeader>
               <form onSubmit={handleVerifyOTP}>
@@ -296,7 +296,7 @@ export default function RegisterPage() {
                       }}
                     >
                       <ArrowLeft className="mr-1 h-3 w-3" />
-                      Back
+                      Atrás
                     </Button>
                     <Button
                       type="button"
@@ -305,7 +305,7 @@ export default function RegisterPage() {
                       onClick={handleResendOTP}
                       disabled={loading}
                     >
-                      Resend code
+                      Reenviar código
                     </Button>
                   </div>
                 </CardFooter>
@@ -322,7 +322,7 @@ export default function RegisterPage() {
                 <div>
                   <h3 className="text-lg font-semibold">Welcome aboard, {name}!</h3>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Your account has been created. Redirecting to your dashboard...
+                    Tu cuenta quedó creada. Te llevamos a tu panel...
                   </p>
                 </div>
                 <div className="flex justify-center">
@@ -338,7 +338,7 @@ export default function RegisterPage() {
           <p className="text-center text-sm text-muted-foreground">
             Already have an account?{' '}
             <Link href="/login" className="font-medium text-primary hover:underline">
-              Sign in
+              Entrar
             </Link>
           </p>
         )}

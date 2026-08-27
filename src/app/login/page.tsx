@@ -129,9 +129,9 @@ export default function LoginPage() {
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary shadow-lg shadow-primary/25">
             <Target className="h-7 w-7 text-primary-foreground" />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight">Refferq</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Amalia</h1>
           <p className="text-sm text-muted-foreground">
-            Affiliate Marketing Platform
+            Portal de afiliadas
           </p>
         </div>
 
@@ -140,9 +140,9 @@ export default function LoginPage() {
           {step === 'email' ? (
             <>
               <CardHeader className="text-center pb-4">
-                <CardTitle className="text-xl">Welcome back</CardTitle>
+                <CardTitle className="text-xl">Hola de nuevo</CardTitle>
                 <CardDescription>
-                  Enter your email to sign in to your account
+                  Escribe tu correo para entrar a tu cuenta
                 </CardDescription>
               </CardHeader>
               <form onSubmit={handleSendOTP}>
@@ -153,13 +153,13 @@ export default function LoginPage() {
                     </Alert>
                   )}
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email address</Label>
+                    <Label htmlFor="email">Correo electrónico</Label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
                         id="email"
                         type="email"
-                        placeholder="you@example.com"
+                        placeholder="nombre@correo.com"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="pl-10"
@@ -188,9 +188,9 @@ export default function LoginPage() {
                 <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
                   <ShieldCheck className="h-6 w-6 text-primary" />
                 </div>
-                <CardTitle className="text-xl">Check your email</CardTitle>
+                <CardTitle className="text-xl">Revisa tu correo</CardTitle>
                 <CardDescription>
-                  We sent a 6-digit code to <span className="font-medium text-foreground">{email}</span>
+                  Enviamos un código de 6 dígitos a <span className="font-medium text-foreground">{email}</span>
                 </CardDescription>
               </CardHeader>
               <form onSubmit={handleVerifyOTP}>
@@ -252,7 +252,7 @@ export default function LoginPage() {
                       }}
                     >
                       <ArrowLeft className="mr-1 h-3 w-3" />
-                      Change email
+                      Cambiar correo
                     </Button>
                     <Button
                       type="button"
@@ -261,7 +261,7 @@ export default function LoginPage() {
                       onClick={handleResendOTP}
                       disabled={loading}
                     >
-                      Resend code
+                      Reenviar código
                     </Button>
                   </div>
                 </CardFooter>
@@ -274,7 +274,7 @@ export default function LoginPage() {
         <p className="text-center text-sm text-muted-foreground">
           Don&apos;t have an account?{' '}
           <Link href="/register" className="font-medium text-primary hover:underline">
-            Sign up
+            Regístrate
           </Link>
         </p>
       </div>

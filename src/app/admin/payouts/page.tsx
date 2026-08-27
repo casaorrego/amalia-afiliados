@@ -37,6 +37,7 @@ import {
   Ban,
   Download,
 } from 'lucide-react';
+import { CURRENCY_SYMBOL } from '@/lib/money';
 
 interface Payout {
   id: string;
@@ -63,7 +64,7 @@ export default function PayoutsPage() {
   const [payouts, setPayouts] = useState<Payout[]>([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState('all');
-  const [currencySymbol, setCurrencySymbol] = useState('₹');
+  const [currencySymbol, setCurrencySymbol] = useState(CURRENCY_SYMBOL);
 
   useEffect(() => {
     fetchPayouts();
@@ -75,7 +76,7 @@ export default function PayoutsPage() {
       const data = await res.json();
       if (data.success) {
         setPayouts(data.payouts || []);
-        setCurrencySymbol(data.currencySymbol || '₹');
+        setCurrencySymbol(data.currencySymbol || CURRENCY_SYMBOL);
       }
     } catch (error) {
       console.error('Failed to fetch payouts:', error);

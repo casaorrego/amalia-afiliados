@@ -64,6 +64,7 @@ import {
   UserPlus,
   ArrowUpDown,
 } from 'lucide-react';
+import { CURRENCY_SYMBOL } from '@/lib/money';
 
 interface Partner {
   id: string;
@@ -91,7 +92,7 @@ export default function PartnersPage() {
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [selectedPartners, setSelectedPartners] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
-  const [currencySymbol, setCurrencySymbol] = useState('₹');
+  const [currencySymbol, setCurrencySymbol] = useState(CURRENCY_SYMBOL);
   const [sortField, setSortField] = useState<keyof Partner>('createdAt');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
 
@@ -145,7 +146,7 @@ export default function PartnersPage() {
           groupName: '',
         }));
         setPartners(formattedPartners);
-        setCurrencySymbol(data.currencySymbol || '₹');
+        setCurrencySymbol(data.currencySymbol || CURRENCY_SYMBOL);
       }
     } catch (error) {
       console.error('Failed to fetch partners:', error);

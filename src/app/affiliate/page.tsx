@@ -50,6 +50,7 @@ import {
   Banknote,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { CURRENCY_SYMBOL, formatCOP, formatPesos } from '@/lib/money';
 
 interface AffiliateStats {
   totalEarnings: number;
@@ -79,7 +80,7 @@ export default function AffiliateDashboard() {
   const { user, loading: authLoading } = useAuth();
   const [stats, setStats] = useState<AffiliateStats | null>(null);
   const [referrals, setReferrals] = useState<Referral[]>([]);
-  const [currencySymbol, setCurrencySymbol] = useState('₹');
+  const [currencySymbol, setCurrencySymbol] = useState(CURRENCY_SYMBOL);
   const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [copied, setCopied] = useState<'link' | 'code' | null>(null);
@@ -116,11 +117,11 @@ export default function AffiliateDashboard() {
           conversionRate: data.stats?.conversionRate || 0,
           referralLink: `${window.location.origin}/r/${data.affiliate?.referralCode}`,
           referralCode: data.affiliate?.referralCode || '',
-          currencySymbol: data.currencySymbol || '₹',
+          currencySymbol: data.currencySymbol || CURRENCY_SYMBOL,
           nextMaturesAt: data.stats?.nextMaturesAt || null,
         });
         setReferrals(data.referrals || []);
-        setCurrencySymbol(data.currencySymbol || '₹');
+        setCurrencySymbol(data.currencySymbol || CURRENCY_SYMBOL);
       }
     } catch (error) {
       console.error('Failed to load dashboard data:', error);
@@ -190,7 +191,7 @@ export default function AffiliateDashboard() {
     new Date(date).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' });
 
   const formatCurrency = (cents: number) =>
-    `${currencySymbol}${(cents / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    formatCOP(cents);
 
   const getStatusBadge = (status: string) => {
     const map: Record<string, { variant: 'default' | 'secondary' | 'destructive' | 'outline'; icon: React.ElementType }> = {
@@ -243,13 +244,13 @@ export default function AffiliateDashboard() {
                 <span className="text-2xl font-bold">{currencySymbol}</span>
               </div>
               <div>
-                <p className="text-sm text-white/90 font-medium tracking-wide">Earn 20% commission on all paid customers</p>
-                <p className="text-xl font-bold mt-1 tracking-tight">Start referring today and grow your wealth!</p>
+                <p className="text-sm text-white/90 font-medium tracking-wide">Gana 20% de comisión por cada paciente que pague</p>
+                <p className="text-xl font-bold mt-1 tracking-tight">Empieza hoy a referir y a ganar</p>
               </div>
             </div>
             <Button variant="secondary" onClick={() => setShowSubmitModal(true)} className="gap-2 hidden sm:flex bg-white text-emerald-700 hover:bg-emerald-50 border-0 shadow-md transform transition hover:scale-105 active:scale-95">
               <Plus className="h-4 w-4" />
-              Submit Lead
+              Registrar referida
             </Button>
           </CardContent>
         </Card>
@@ -259,15 +260,15 @@ export default function AffiliateDashboard() {
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
         {[
           {
-            label: 'Available Balance',
+            label: 'Saldo disponible',
             value: formatCurrency(stats?.totalEarnings || 0),
             icon: Banknote,
             color: 'text-emerald-600',
             bg: 'bg-emerald-500/10',
-            description: 'Ready for payout'
+            description: 'Listo para pagar'
           },
           {
-            label: 'Pending Balance',
+            label: 'Saldo pendiente',
             value: formatCurrency(stats?.pendingEarnings || 0),
             icon: Clock,
             color: 'text-amber-600',
@@ -276,9 +277,9 @@ export default function AffiliateDashboard() {
               ? `Next maturity: ${new Date(stats.nextMaturesAt).toLocaleDateString()}`
               : 'Held for refund period'
           },
-          { label: 'Total Clicks', value: stats?.totalClicks || 0, icon: MousePointerClick, color: 'text-blue-600', bg: 'bg-blue-500/10' },
-          { label: 'Total Leads', value: stats?.totalLeads || 0, icon: Target, color: 'text-rose-600', bg: 'bg-rose-500/10' },
-          { label: 'Conv. Rate', value: `${stats?.conversionRate?.toFixed(1) || '0.0'}%`, icon: TrendingUp, color: 'text-violet-600', bg: 'bg-violet-500/10' },
+          { label: 'Clics totales', value: stats?.totalClicks || 0, icon: MousePointerClick, color: 'text-blue-600', bg: 'bg-blue-500/10' },
+          { label: 'Referidas totales', value: stats?.totalLeads || 0, icon: Target, color: 'text-rose-600', bg: 'bg-rose-500/10' },
+          { label: 'Conversión', value: `${stats?.conversionRate?.toFixed(1) || '0.0'}%`, icon: TrendingUp, color: 'text-violet-600', bg: 'bg-violet-500/10' },
         ].map((stat, i) => (
           <motion.div
             key={i}
@@ -318,7 +319,7 @@ export default function AffiliateDashboard() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">
             <Link className="h-4 w-4" />
-            Your Referral Links
+            Tus links
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -327,18 +328,18 @@ export default function AffiliateDashboard() {
               <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-muted mb-4">
                 <Link className="h-6 w-6 text-muted-foreground" />
               </div>
-              <p className="font-medium">No referral code found</p>
+              <p className="font-medium">No encontramos tu código</p>
               <p className="mt-1 text-sm text-muted-foreground">
-                Generate your referral code to start earning commissions
+                Genera tu código para empezar a ganar comisiones
               </p>
               <Button className="mt-4" onClick={handleGenerateCode}>
-                Generate Referral Code
+                Generar mi código
               </Button>
             </div>
           ) : (
             <>
               <div className="space-y-2">
-                <Label>Referral Link</Label>
+                <Label>Tu link</Label>
                 <div className="flex gap-2">
                   <Input readOnly value={stats?.referralLink || ''} className="font-mono text-sm" />
                   <Button
@@ -351,7 +352,7 @@ export default function AffiliateDashboard() {
                 </div>
               </div>
               <div className="space-y-2">
-                <Label>Referral Code</Label>
+                <Label>Tu código</Label>
                 <div className="flex gap-2">
                   <Input readOnly value={stats?.referralCode || ''} className="font-mono text-sm" />
                   <Button
@@ -372,13 +373,13 @@ export default function AffiliateDashboard() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
-            <CardTitle className="text-base">Recent Referrals</CardTitle>
-            <CardDescription>Latest 5 referrals</CardDescription>
+            <CardTitle className="text-base">Referidas recientes</CardTitle>
+            <CardDescription>Tus últimas 5 referidas</CardDescription>
           </div>
           {referrals.length > 5 && (
             <Button variant="ghost" size="sm" asChild>
               <a href="/affiliate/referrals" className="gap-1">
-                View All <ArrowRight className="h-3.5 w-3.5" />
+                Ver todas <ArrowRight className="h-3.5 w-3.5" />
               </a>
             </Button>
           )}
@@ -390,11 +391,11 @@ export default function AffiliateDashboard() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead className="text-right">Value</TableHead>
+                  <TableHead>Nombre</TableHead>
+                  <TableHead>Correo</TableHead>
+                  <TableHead>Estado</TableHead>
+                  <TableHead>Fecha</TableHead>
+                  <TableHead className="text-right">Valor</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -405,7 +406,7 @@ export default function AffiliateDashboard() {
                     <TableCell>{getStatusBadge(ref.status)}</TableCell>
                     <TableCell className="text-muted-foreground text-sm">{formatDate(ref.createdAt)}</TableCell>
                     <TableCell className="text-right font-semibold">
-                      {`${currencySymbol}${(Number(ref.estimatedValue) || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                      {formatPesos(ref.estimatedValue)}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -421,8 +422,8 @@ export default function AffiliateDashboard() {
           <CardContent className="p-5 flex items-center gap-3">
             <Users className="h-5 w-5 text-blue-600" />
             <div>
-              <p className="font-medium">Manage Referrals</p>
-              <p className="text-xs text-muted-foreground">View all your submissions</p>
+              <p className="font-medium">Mis referidas</p>
+              <p className="text-xs text-muted-foreground">Ver todas tus referidas</p>
             </div>
             <ArrowRight className="h-4 w-4 ml-auto text-muted-foreground" />
           </CardContent>
@@ -431,8 +432,8 @@ export default function AffiliateDashboard() {
           <CardContent className="p-5 flex items-center gap-3">
             <TrendingUp className="h-5 w-5 text-emerald-600" />
             <div>
-              <p className="font-medium">View Reports</p>
-              <p className="text-xs text-muted-foreground">Analyze your performance</p>
+              <p className="font-medium">Ver reportes</p>
+              <p className="text-xs text-muted-foreground">Mira cómo va tu desempeño</p>
             </div>
             <ArrowRight className="h-4 w-4 ml-auto text-muted-foreground" />
           </CardContent>
@@ -441,8 +442,8 @@ export default function AffiliateDashboard() {
           <CardContent className="p-5 flex items-center gap-3">
             <Target className="h-5 w-5 text-violet-600" />
             <div>
-              <p className="font-medium">Resources</p>
-              <p className="text-xs text-muted-foreground">Marketing materials</p>
+              <p className="font-medium">Material</p>
+              <p className="text-xs text-muted-foreground">Material de promoción</p>
             </div>
             <ArrowRight className="h-4 w-4 ml-auto text-muted-foreground" />
           </CardContent>
@@ -453,7 +454,7 @@ export default function AffiliateDashboard() {
       <Dialog open={showSubmitModal} onOpenChange={setShowSubmitModal}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Submit Lead</DialogTitle>
+            <DialogTitle>Registrar referida</DialogTitle>
             <DialogDescription>
               Enter the details below to submit a lead. Ensure all information is accurate for proper tracking.
             </DialogDescription>
@@ -466,7 +467,7 @@ export default function AffiliateDashboard() {
                 required
                 value={submitForm.leadName}
                 onChange={(e) => setSubmitForm({ ...submitForm, leadName: e.target.value })}
-                placeholder="Full name"
+                placeholder="Nombre completo"
               />
             </div>
             <div className="space-y-2">
@@ -476,7 +477,7 @@ export default function AffiliateDashboard() {
                 required
                 value={submitForm.leadEmail}
                 onChange={(e) => setSubmitForm({ ...submitForm, leadEmail: e.target.value })}
-                placeholder="email@example.com"
+                placeholder="nombre@correo.com"
               />
             </div>
             <div className="space-y-2">
@@ -488,12 +489,12 @@ export default function AffiliateDashboard() {
                 onChange={(e) => setSubmitForm({ ...submitForm, estimatedValue: e.target.value })}
                 placeholder="0"
               />
-              <p className="text-xs text-muted-foreground">Type 0 if unsure</p>
+              <p className="text-xs text-muted-foreground">Escribe 0 si no sabes</p>
             </div>
 
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => setShowSubmitModal(false)}>
-                Cancel
+                Cancelar
               </Button>
               <Button type="submit" disabled={submitLoading}>
                 {submitLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

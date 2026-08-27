@@ -138,7 +138,7 @@ export default function ReportsPage() {
     `\u20B9${(cents / 100).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
   const exportCSV = () => {
-    const headers = ['Month', 'Referrals', 'Conversions', 'Earnings (₹)'];
+    const headers = ['Mes', 'Referidas', 'Conversiones', 'Earnings (₹)'];
     const rows = monthlyData.map((m) => [m.month, m.referrals, m.conversions, (m.earnings / 100).toFixed(2)]);
     const csv = [headers, ...rows].map((row) => row.join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });
@@ -167,8 +167,8 @@ export default function ReportsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Reports</h1>
-          <p className="text-muted-foreground">Analyze your affiliate performance</p>
+          <h1 className="text-2xl font-bold tracking-tight">Reportes</h1>
+          <p className="text-muted-foreground">Mira cómo va tu desempeño</p>
         </div>
         <div className="flex items-center gap-2">
           <Select value={period} onValueChange={setPeriod}>
@@ -177,14 +177,14 @@ export default function ReportsPage() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="3months">Last 3 months</SelectItem>
-              <SelectItem value="6months">Last 6 months</SelectItem>
-              <SelectItem value="12months">Last 12 months</SelectItem>
+              <SelectItem value="3months">Últimos 3 meses</SelectItem>
+              <SelectItem value="6months">Últimos 6 meses</SelectItem>
+              <SelectItem value="12months">Últimos 12 meses</SelectItem>
             </SelectContent>
           </Select>
           <Button variant="outline" onClick={exportCSV} className="gap-1.5">
             <Download className="h-4 w-4" />
-            Export
+            Exportar
           </Button>
         </div>
       </div>
@@ -199,7 +199,7 @@ export default function ReportsPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold text-emerald-600">{formatCurrency(stats.totalEarnings)}</p>
-                <p className="text-xs text-muted-foreground">Total Earnings</p>
+                <p className="text-xs text-muted-foreground">Ganancias totales</p>
               </div>
             </div>
           </CardContent>
@@ -212,7 +212,7 @@ export default function ReportsPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.totalLeads}</p>
-                <p className="text-xs text-muted-foreground">Total Leads</p>
+                <p className="text-xs text-muted-foreground">Referidas totales</p>
               </div>
             </div>
           </CardContent>
@@ -225,7 +225,7 @@ export default function ReportsPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.totalConversions}</p>
-                <p className="text-xs text-muted-foreground">Conversions</p>
+                <p className="text-xs text-muted-foreground">Conversiones</p>
               </div>
             </div>
           </CardContent>
@@ -238,7 +238,7 @@ export default function ReportsPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.conversionRate.toFixed(1)}%</p>
-                <p className="text-xs text-muted-foreground">Conversion Rate</p>
+                <p className="text-xs text-muted-foreground">Tasa de conversión</p>
               </div>
             </div>
           </CardContent>
@@ -248,8 +248,8 @@ export default function ReportsPage() {
       {/* Earnings Chart (CSS bar chart) */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Monthly Earnings</CardTitle>
-          <CardDescription>Revenue generated from your referrals</CardDescription>
+          <CardTitle className="text-base">Ganancias por mes</CardTitle>
+          <CardDescription>Ventas generadas por tus referidas</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex items-end gap-2 h-48">
@@ -270,16 +270,16 @@ export default function ReportsPage() {
       {/* Monthly Breakdown Table */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Monthly Breakdown</CardTitle>
+          <CardTitle className="text-base">Detalle por mes</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Month</TableHead>
-                <TableHead className="text-center">Referrals</TableHead>
-                <TableHead className="text-center">Conversions</TableHead>
-                <TableHead className="text-right">Earnings</TableHead>
+                <TableHead>Mes</TableHead>
+                <TableHead className="text-center">Referidas</TableHead>
+                <TableHead className="text-center">Conversiones</TableHead>
+                <TableHead className="text-right">Ganancias</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
