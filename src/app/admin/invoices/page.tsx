@@ -280,7 +280,7 @@ export default function InvoicesPage() {
               <div className="grid gap-2">
                 <Label>Amount (cents) *</Label>
                 <Input type="number" value={form.amountCents} onChange={e => setForm({...form, amountCents: e.target.value})} placeholder="100000" />
-                <p className="text-xs text-muted-foreground">100000 = ₹1,000</p>
+                <p className="text-xs text-muted-foreground">100000 = $1.000</p>
               </div>
               <div className="grid gap-2">
                 <Label>Tax (cents)</Label>

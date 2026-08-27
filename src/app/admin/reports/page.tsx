@@ -67,6 +67,7 @@ import {
   Save,
   Layers,
 } from 'lucide-react';
+import { formatCOP } from '@/lib/money';
 
 // ────────────────────────────────────────────────
 //  Types
@@ -413,7 +414,7 @@ export default function ReportsPage() {
                         <span className="font-medium">
                           {typeof v === 'number'
                             ? k.toLowerCase().includes('cents')
-                              ? `₹${(v / 100).toLocaleString('en-IN', { minimumFractionDigits: 2 })}`
+                              ? formatCOP(v)
                               : v.toLocaleString()
                             : String(v)}
                         </span>
@@ -433,7 +434,7 @@ export default function ReportsPage() {
                 <p className="text-2xl font-bold">
                   {typeof value === 'number'
                     ? key.toLowerCase().includes('cents')
-                      ? `₹${(value / 100).toLocaleString('en-IN', { minimumFractionDigits: 2 })}`
+                      ? formatCOP(value)
                       : value.toLocaleString()
                     : String(value)}
                 </p>
@@ -468,7 +469,7 @@ export default function ReportsPage() {
                   let display: string;
                   if (val === null || val === undefined) display = '—';
                   else if (typeof val === 'number' && col.toLowerCase().includes('cents'))
-                    display = `₹${(val / 100).toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+                    display = formatCOP(val);
                   else if (typeof val === 'number') display = val.toLocaleString();
                   else display = String(val);
                   return <TableCell key={col} className="text-sm whitespace-nowrap">{display}</TableCell>;
@@ -903,10 +904,10 @@ export default function ReportsPage() {
                             <TableCell className="text-right">{c.conversionRate}%</TableCell>
                             <TableCell className="text-right">{c.totalCommissions}</TableCell>
                             <TableCell className="text-right font-medium">
-                              ₹{(c.totalEarningsCents / 100).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                              {formatCOP(c.totalEarningsCents)}
                             </TableCell>
                             <TableCell className="text-right text-muted-foreground">
-                              ₹{(c.avgEarningsPerAffiliateCents / 100).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                              {formatCOP(c.avgEarningsPerAffiliateCents)}
                             </TableCell>
                           </TableRow>
                         ))}

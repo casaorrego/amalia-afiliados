@@ -14,6 +14,12 @@ export const affiliateCreateSchema = z.object({
     name: z.string().min(2, 'Name must be at least 2 characters'),
     email: z.string().email('Invalid email address'),
     password: z.string().min(8, 'Password must be at least 8 characters').optional(),
+    // Datos de pago. Iban en el formulario del admin pero NO estaban
+    // acá, así que Zod los descartaba y el afiliado quedaba con
+    // payoutDetails vacío. paypalEmail es texto libre, no correo: en
+    // Colombia suele ser un numero de Nequi o una cuenta bancaria.
+    payoutMethod: z.string().optional(),
+    paypalEmail: z.string().optional(),
 });
 
 // Payout Validation

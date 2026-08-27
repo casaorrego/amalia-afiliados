@@ -1,19 +1,19 @@
 import { prisma } from './prisma';
 
+// Amalia opera en Colombia: COP es el default y el respaldo. El resto
+// se deja por si algun dia se usa, pero no hay ninguna razon para que
+// el portal muestre rupias, que era lo que traia el upstream.
 const CURRENCY_SYMBOLS: Record<string, string> = {
-    'USD': '$',
+    'COP': '$',
+    'USD': 'US$',
     'EUR': '€',
-    'INR': '₹',
     'GBP': '£',
-    'BGN': 'лв.',
-    'CAD': 'CA$',
-    'AUD': 'A$',
 };
 
 export async function getCurrencySymbol(): Promise<string> {
     try {
         const settings = await prisma.programSettings.findFirst();
-        const currency = settings?.currency || 'USD';
+        const currency = settings?.currency || 'COP';
         return CURRENCY_SYMBOLS[currency] || currency;
     } catch (error) {
         console.error('Failed to fetch currency symbol:', error);

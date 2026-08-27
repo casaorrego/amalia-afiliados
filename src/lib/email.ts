@@ -369,14 +369,14 @@ class EmailService {
         <div class="details">
           <h3>Payout Details:</h3>
           <p><strong>Amount:</strong> ${this.formatAmount(data.amount, symbol)}</p>
-          <p><strong>Method:</strong> ${data.method === 'stripe_connect' ? 'Stripe Connect' : 'Bank Transfer'}</p>
+          <p><strong>Method:</strong> ${data.method || 'Nequi'}</p>
           <p><strong>Processing Date:</strong> ${this.escapeHtml(data.processingDate)}</p>
         </div>
         
         ${data.method === 'bank_csv' ? `
         <p>Your payout will be processed via bank transfer within 3-5 business days.</p>
         ` : `
-        <p>Your payout has been sent to your connected Stripe account and should be available immediately.</p>
+        <p>Tu pago fue enviado a la cuenta que registraste.</p>
         `}
         
         <div style="text-align: center;">
@@ -733,7 +733,7 @@ class EmailService {
     return this.sendTemplatedEmail({
       to: affiliateEmail,
       templateType: 'PAYOUT_GENERATED',
-      fallbackSubject: `🎉 Payout Initiated: ₹${amount}`,
+      fallbackSubject: `🎉 Payout Initiated: $${amount}`,
       variables: { ...data, amount: this.formatAmount(data.amountCents, symbol), symbol },
       generateFallbackHtml: () => `
       <!DOCTYPE html>
@@ -762,7 +762,7 @@ class EmailService {
           
           <div class="amount-box">
             <div style="font-size: 14px; color: #666; margin-bottom: 10px;">Payout Amount</div>
-            <div class="amount">₹${amount}</div>
+            <div class="amount">$${amount}</div>
             <div style="margin-top: 15px;">
               <span class="status-badge">PENDING</span>
             </div>
@@ -819,7 +819,7 @@ class EmailService {
     return this.sendTemplatedEmail({
       to: affiliateEmail,
       templateType: 'PARTNER_PAID',
-      fallbackSubject: `✅ Payment Completed: ₹${amount} Paid!`,
+      fallbackSubject: `✅ Payment Completed: $${amount} Paid!`,
       variables: { ...data, amount: this.formatAmount(data.amountCents, symbol), date, symbol },
       generateFallbackHtml: () => `
       <!DOCTYPE html>
@@ -851,7 +851,7 @@ class EmailService {
           
           <div class="amount-box">
             <div style="font-size: 14px; color: #666; margin-bottom: 10px;">Amount Paid</div>
-            <div class="amount">₹${amount}</div>
+            <div class="amount">$${amount}</div>
             <div style="margin-top: 15px;">
               <span class="status-badge">✓ COMPLETED</span>
             </div>

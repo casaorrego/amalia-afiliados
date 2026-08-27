@@ -138,7 +138,7 @@ export default function ReportsPage() {
     `\u20B9${(cents / 100).toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
   const exportCSV = () => {
-    const headers = ['Mes', 'Referidas', 'Conversiones', 'Earnings (₹)'];
+    const headers = ['Mes', 'Referidas', 'Conversiones', 'Ganancias (COP)'];
     const rows = monthlyData.map((m) => [m.month, m.referrals, m.conversions, (m.earnings / 100).toFixed(2)]);
     const csv = [headers, ...rows].map((row) => row.join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });

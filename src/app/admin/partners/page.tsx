@@ -103,7 +103,7 @@ export default function PartnersPage() {
     company: '',
     partnerGroup: 'Default',
     country: 'N/A',
-    payoutMethod: 'PayPal',
+    payoutMethod: 'Nequi',
     paypalEmail: '',
     sendWelcomeEmail: true,
     trackingParameter: 'ref',
@@ -225,7 +225,7 @@ export default function PartnersPage() {
         setShowCreateModal(false);
         setNewPartner({
           firstName: '', lastName: '', email: '', company: '',
-          partnerGroup: 'Default', country: 'N/A', payoutMethod: 'PayPal',
+          partnerGroup: 'Default', country: 'N/A', payoutMethod: 'Nequi',
           paypalEmail: '', sendWelcomeEmail: true, trackingParameter: 'ref',
         });
         fetchPartners();
@@ -639,22 +639,23 @@ export default function PartnersPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="PayPal">PayPal</SelectItem>
-                      <SelectItem value="Wise">Wise</SelectItem>
-                      <SelectItem value="Bank">Bank Transfer</SelectItem>
-                      <SelectItem value="Crypto">Crypto</SelectItem>
+                      {/* Medios que existen en Colombia. El upstream traía
+                          PayPal, Wise y Crypto — inservibles acá. */}
+                      <SelectItem value="Nequi">Nequi</SelectItem>
+                      <SelectItem value="Daviplata">Daviplata</SelectItem>
+                      <SelectItem value="Transferencia bancaria">Bank transfer</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="paypalEmail">PayPal Email (Optional)</Label>
+                <Label htmlFor="paypalEmail">Nequi / Daviplata number or bank account (optional)</Label>
                 <Input
                   id="paypalEmail"
-                  type="email"
+                  type="text"
                   value={newPartner.paypalEmail}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewPartner({ ...newPartner, paypalEmail: e.target.value })}
-                  placeholder="defaults to partner email"
+                  placeholder="defaults to their email"
                 />
               </div>
               <div className="flex items-center space-x-2">

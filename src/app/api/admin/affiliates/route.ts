@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { name, email, password } = data;
+    const { name, email, password, payoutMethod, paypalEmail } = data;
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
@@ -129,7 +129,15 @@ export async function POST(request: NextRequest) {
         userId: newUser.id,
         referralCode: `AF${Date.now()}${(await import('crypto')).randomBytes(3).toString('hex').toUpperCase().slice(0, 4)}`,
         balanceCents: 0,
-        payoutDetails: {}
+        // Se guarda lo que el admin llenó en el formulario. Antes esto
+        // era `{}` fijo: el método de pago se descartaba en silencio y
+        // la afiliada abría sus ajustes con todo vacío.
+        // Las llaves tienen que ser las MISMAS que lee
+        // /affiliate/settings (paymentMethod, paymentEmail).
+        payoutDetails: {
+          paymentMethod: payoutMethod || 'Nequi',
+          paymentEmail: paypalEmail || email,
+        }
       }
     });
 

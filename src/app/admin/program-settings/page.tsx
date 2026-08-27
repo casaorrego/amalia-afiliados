@@ -61,6 +61,7 @@ import {
   Zap,
   Clock,
 } from 'lucide-react';
+import { formatPesos } from '@/lib/money';
 
 interface ProgramSettings {
   id: string;
@@ -322,7 +323,7 @@ export default function ProgramSettingsPage() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="INR">INR (₹)</SelectItem>
+                  <SelectItem value="COP">COP ($)</SelectItem>
                   <SelectItem value="USD">USD ($)</SelectItem>
                   <SelectItem value="EUR">EUR (€)</SelectItem>
                   <SelectItem value="GBP">GBP (£)</SelectItem>
@@ -493,7 +494,7 @@ export default function ProgramSettingsPage() {
                       <Badge variant="outline">{rule.type}</Badge>
                     </TableCell>
                     <TableCell>
-                      {rule.type === 'PERCENTAGE' ? `${rule.value}%` : `₹${rule.value}`}
+                      {rule.type === 'PERCENTAGE' ? `${rule.value}%` : formatPesos(rule.value)}
                     </TableCell>
                     <TableCell>
                       {rule.isDefault && <Badge variant="default">Default</Badge>}

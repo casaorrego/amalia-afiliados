@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -271,12 +270,7 @@ export default function LoginPage() {
         </Card>
 
         {/* Footer */}
-        <p className="text-center text-sm text-muted-foreground">
-          ¿No tienes cuenta?{' '}
-          <Link href="/register" className="font-medium text-primary hover:underline">
-            Regístrate
-          </Link>
-        </p>
+        
       </div>
     </div>
   );
