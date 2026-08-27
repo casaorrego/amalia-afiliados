@@ -123,7 +123,10 @@ export default function ApiKeysPage() {
       });
       const json = await res.json();
       if (json.success) {
-        setNewKeySecret(json.apiKey.fullKey);
+        // El servidor la devuelve como `key`, no `fullKey`: con el nombre
+        // equivocado esto quedaba undefined y el cuadro salía vacío — la
+        // llave se perdía para siempre porque solo se muestra una vez.
+        setNewKeySecret(json.apiKey.key);
         await fetchKeys();
       }
     } catch (error) {

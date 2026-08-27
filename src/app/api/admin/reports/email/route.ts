@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { resend } from '@/lib/email';
+import { emailService } from '@/lib/email';
 import { APP_URL } from '@/lib/config';
 import { formatCOP } from '@/lib/money';
 
@@ -42,63 +42,35 @@ export async function POST(request: NextRequest) {
     const csvContent = convertToCSV(reportData.data || [reportData.summary || reportData]);
 
     // Build email HTML
-    const reportDate = new Date().toLocaleDateString('en-IN', {
+    const reportDate = new Date().toLocaleDateString('es-CO', {
       day: 'numeric',
       month: 'long',
       year: 'numeric',
     });
 
-    const html = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <meta charset="utf-8">
-      <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }
-        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
-        .content { background: #f8f9fa; padding: 30px; border-radius: 0 0 10px 10px; }
-        .stat { display: inline-block; background: white; padding: 15px 20px; border-radius: 8px; margin: 5px; text-align: center; min-width: 120px; }
-        .stat-value { font-size: 24px; font-weight: bold; color: #667eea; }
-        .stat-label { font-size: 12px; color: #888; text-transform: uppercase; }
-        .footer { text-align: center; margin-top: 20px; color: #888; font-size: 12px; }
-        table { width: 100%; border-collapse: collapse; margin: 15px 0; }
-        th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid #eee; font-size: 13px; }
-        th { background: #f0f0f0; font-weight: 600; }
-      </style>
-    </head>
-    <body>
-      <div class="header">
-        <h1>📊 ${reportData.type || 'Report'}</h1>
-        <p style="margin: 5px 0; opacity: 0.9;">Generated on ${reportDate}</p>
-        ${startDate && endDate ? `<p style="margin: 0; opacity: 0.8; font-size: 14px;">${startDate} — ${endDate}</p>` : ''}
-      </div>
-      <div class="content">
-        ${reportData.summary ? renderSummaryHTML(reportData.summary) : ''}
-        ${reportData.data && reportData.data.length > 0 ? renderTableHTML(reportData.data.slice(0, 20)) : ''}
-        ${reportData.data && reportData.data.length > 20 ? `<p style="color: #888; font-size: 13px;">Showing 20 of ${reportData.data.length} records. Full data attached as CSV.</p>` : ''}
-        <p style="margin-top: 20px;">
-          <a href="${APP_URL}/admin/reports" style="display: inline-block; background: #667eea; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px;">
-            View Full Report
-          </a>
-        </p>
-      </div>
-      <div class="footer">
-        <p>This report was sent from Refferq by ${user.name} (${user.email})</p>
-        <p>© ${new Date().getFullYear()} Refferq. All rights reserved.</p>
-      </div>
-    </body>
-    </html>
-    `;
+    // Resumen en TEXTO: Loops no manda HTML arbitrario, el diseño vive
+    // en su plantilla. El detalle completo va en el CSV adjunto y en el
+    // link al reporte.
+    const lineas: string[] = [];
+    if (startDate && endDate) lineas.push(`Periodo: ${startDate} — ${endDate}`);
+    if (reportData.summary) {
+      for (const [k, v] of Object.entries(reportData.summary)) {
+        lineas.push(`${k}: ${String(v)}`);
+      }
+    }
+    if (reportData.data?.length) {
+      lineas.push(`Registros: ${reportData.data.length}`);
+    }
+    lineas.push(`Ver el reporte completo: ${APP_URL}/admin/reports`);
+    lineas.push(`Enviado por ${user.name} (${user.email})`);
+    const resumenTexto = lineas.join('\n');
 
     // Send to all recipients
-    const fromEmail = process.env.RESEND_FROM_EMAIL || 'Refferq <noreply@refferq.com>';
     const results = await Promise.allSettled(
       recipients.map((email: string) =>
-        resend.emails.send({
-          from: fromEmail,
-          to: email.trim(),
-          subject: `[Refferq] ${reportData.type || 'Report'} — ${reportDate}`,
-          html,
+        emailService.sendGenericEmail(email.trim(), {
+          subject: `Reporte ${reportData.type || ''} — ${reportDate}`,
+          body: resumenTexto,
         })
       )
     );

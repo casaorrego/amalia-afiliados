@@ -78,13 +78,13 @@ export async function POST(request: Request) {
       testBody = testBody.replace(regex, value);
     });
 
-    // Actually send the test email via Resend
+    // Sale por la plantilla generica de Loops: alli no se puede mandar
+    // HTML arbitrario, asi que el cuerpo viaja como variable de texto.
     try {
-      await emailService.sendCustomEmail(
-        recipientEmail,
-        `[TEST] ${testSubject}`,
-        testBody
-      );
+      await emailService.sendGenericEmail(recipientEmail, {
+        subject: `[PRUEBA] ${testSubject}`,
+        body: testBody,
+      });
     } catch (emailError) {
       console.error('Email send failed:', emailError);
     }
