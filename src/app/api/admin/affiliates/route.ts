@@ -154,13 +154,14 @@ export async function POST(request: NextRequest) {
     // Best-effort: un fallo de correo no debe tumbar la creacion.
     if (sendWelcomeEmail !== false) {
       const { sendBienvenidaEmail } = await import('@/lib/loops');
-      const { APP_URL } = await import('@/lib/config');
+      const { APP_URL, MANUAL_URL, linkDeReferido } = await import('@/lib/config');
       const r = await sendBienvenidaEmail({
         email,
         nombre: (name || '').trim().split(/\s+/)[0] || '',
         codigo: affiliate.referralCode,
-        link: `https://somosamalia.com/?ref=${affiliate.referralCode}`,
+        link: linkDeReferido(affiliate.referralCode),
         entrar: `${APP_URL}/login`,
+        manual: MANUAL_URL,
       });
       if (!r.ok) console.error('[afiliadas] bienvenida no salio:', r.error);
     }
