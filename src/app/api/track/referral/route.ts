@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { referralCode, url, referrer, userAgent, timestamp } = body;
+    const { referralCode, customerEmail, customerName } = body;
 
     if (!referralCode) {
       return NextResponse.json(
@@ -69,25 +69,46 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Log the referral click
-    console.log('✅ Referral click tracked:', {
-      affiliateId: affiliate.id,
-      referralCode,
-      url,
-      referrer,
-      timestamp,
+    // Referida PENDIENTE: alguien que llego por su link ya hizo su
+    // PRIMER pago, pero la comision todavia no se gana — eso pasa con
+    // el segundo (amalia-app decide cuando). Sin este aviso la afiliada
+    // veia su panel en cero durante un mes entero despues de haber
+    // conseguido a alguien, y lo natural es pensar que el link no
+    // sirve y dejar de promocionar.
+    //
+    // Antes esta ruta era una cascara: validaba el codigo, escribia una
+    // linea en el log y devolvia exito sin guardar nada.
+    //
+    // Idempotente por (afiliada, correo): amalia-app puede llamar en
+    // cada pago sin duplicar. Cuando llegue el segundo pago,
+    // /track/conversion encuentra esta misma fila y la pasa a APPROVED.
+    if (!customerEmail) {
+      return NextResponse.json(
+        { success: false, error: 'customerEmail is required' },
+        { status: 400 }
+      );
+    }
+
+    const existente = await prisma.referral.findFirst({
+      where: { affiliateId: affiliate.id, leadEmail: customerEmail },
     });
 
-    // You can optionally create a ReferralClick record or update stats
-    // For now, we'll just log it and return success
+    const referral =
+      existente ??
+      (await prisma.referral.create({
+        data: {
+          affiliateId: affiliate.id,
+          leadEmail: customerEmail,
+          leadName: customerName || 'Referida',
+          status: 'PENDING',
+          metadata: { origen: 'primer_pago' },
+        },
+      }));
 
     return NextResponse.json({
       success: true,
-      message: 'Referral tracked successfully',
-      affiliate: {
-        name: affiliate.user.name,
-        code: affiliate.referralCode,
-      },
+      message: existente ? 'Referral already tracked' : 'Pending referral created',
+      referral: { id: referral.id, status: referral.status },
     });
   } catch (error) {
     console.error('POST /api/track/referral error:', error);
