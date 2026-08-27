@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { verifyApiKey } from '@/lib/api-auth';
 
 /**
  * GET /api/track/validate?code=XXXX  →  { valid: boolean }
@@ -21,10 +22,8 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ valid: false, error: 'API key is required' }, { status: 401 });
   }
 
-  const integration = await prisma.integrationSettings.findFirst({
-    where: { publicKey: apiKey, isActive: true },
-  });
-  if (!integration) {
+  const auth = await verifyApiKey(apiKey);
+  if (!auth.ok) {
     return NextResponse.json({ valid: false, error: 'Invalid or inactive API key' }, { status: 401 });
   }
 
