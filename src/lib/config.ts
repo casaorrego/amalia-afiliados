@@ -15,3 +15,10 @@
  *  local o para un preview de Vercel; en producción no hace falta. */
 export const APP_URL =
   process.env.NEXT_PUBLIC_APP_URL || "https://afiliados.somosamalia.com";
+
+/** El sitio público de Amalia — a donde manda la afiliada a su gente.
+ *  El link que comparte apunta ACÁ, no al portal: `?ref=CODIGO` sobre
+ *  somosamalia.com parece una recomendación, mientras que un
+ *  afiliados.…/r/AF178… se lee como link de comisión y espanta.
+ *  El marketing lee ese ?ref y lo guarda 30 días. */
+export const MARKETING_URL = "https://somosamalia.com";

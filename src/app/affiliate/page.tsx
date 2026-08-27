@@ -51,6 +51,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CURRENCY_SYMBOL, formatCOP, formatPesos } from '@/lib/money';
+import { MARKETING_URL } from '@/lib/config';
 
 interface AffiliateStats {
   totalEarnings: number;
@@ -115,7 +116,7 @@ export default function AffiliateDashboard() {
           totalReferredCustomers: data.referrals?.filter((r: any) => r.status === 'APPROVED').length || 0,
           totalConversions: data.stats?.totalConversions || 0,
           conversionRate: data.stats?.conversionRate || 0,
-          referralLink: `${window.location.origin}/r/${data.affiliate?.referralCode}`,
+          referralLink: `${MARKETING_URL}/?ref=${data.affiliate?.referralCode}`,
           referralCode: data.affiliate?.referralCode || '',
           currencySymbol: data.currencySymbol || CURRENCY_SYMBOL,
           nextMaturesAt: data.stats?.nextMaturesAt || null,
