@@ -32,7 +32,7 @@ import {
   CheckCircle2,
   XCircle,
   Loader2,
-  IndianRupee,
+  DollarSign,
   ArrowUpRight,
   Ban,
   Download,

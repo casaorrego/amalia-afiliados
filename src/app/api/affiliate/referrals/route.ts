@@ -1,83 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-export async function POST(request: NextRequest) {
-  try {
-    const userId = request.headers.get('x-user-id')!;
-
-    // Get user from database
-
-    // Get user from database
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      include: {
-        affiliate: true
-      }
-    });
-
-    if (!user) {
-      return NextResponse.json(
-        { error: 'User not found' },
-        { status: 401 }
-      );
-    }
-
-    if (user.role !== 'AFFILIATE') {
-      return NextResponse.json(
-        { error: 'Access denied. Affiliate role required.' },
-        { status: 403 }
-      );
-    }
-
-    if (!user.affiliate) {
-      return NextResponse.json(
-        { error: 'Affiliate profile not found' },
-        { status: 404 }
-      );
-    }
-
-    const body = await request.json();
-
-    // Validate with Zod
-    const { success, data, error: validationError } = await import('@/lib/validations').then(m => m.referralSchema.safeParse(body));
-
-    if (!success) {
-      return NextResponse.json(
-        { error: 'Validation failed', details: validationError.issues },
-        { status: 400 }
-      );
-    }
-
-    const { leadName, leadEmail, company, notes, estimatedValue } = data;
-
-    // Create the referral
-    const referral = await prisma.referral.create({
-      data: {
-        affiliateId: user.affiliate.id,
-        leadName: leadName.trim(),
-        leadEmail: leadEmail.toLowerCase().trim(),
-        status: 'PENDING',
-        metadata: {
-          company: company || '',
-          notes: notes || '',
-          source: 'manual',
-          estimated_value: estimatedValue || 0,
-        },
-      }
-    });
-
-    return NextResponse.json({
-      success: true,
-      message: 'Referral submitted successfully',
-      referral,
-    });
-  } catch (error) {
-    console.error('Submit referral API error:', error);
-    return NextResponse.json(
-      { error: 'Failed to submit referral' },
-      { status: 500 }
-    );
-  }
+/**
+ * Registrar una referida A MANO está DESACTIVADO (founder 27-ago).
+ *
+ * La afiliada podía escribir el nombre y correo de cualquier persona y
+ * quedaba como referida suya. Eso rompe la atribución: la referida se
+ * la puede estar trayendo otra, o puede no existir. Las referidas
+ * entran SOLO por el sistema de tracking — alguien abre su link, el
+ * ?ref queda guardado, y la conversión la reporta el servidor cuando
+ * el pago está aprobado de verdad.
+ *
+ * Se deja el 405 en vez de borrar la ruta: la de GET (listar) sigue
+ * viva en este mismo archivo, y así queda explícito que POST está
+ * cerrado a propósito y no es un descuido.
+ */
+export async function POST() {
+  return NextResponse.json(
+    {
+      error:
+        'Las referidas se registran solas cuando alguien entra por tu link.',
+    },
+    { status: 405 }
+  );
 }
 
 export async function GET(request: NextRequest) {

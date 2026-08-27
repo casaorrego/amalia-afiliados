@@ -24,7 +24,7 @@ import {
 } from '@/components/ui/tooltip';
 import {
   TrendingUp,
-  IndianRupee,
+  DollarSign,
   Users,
   Target,
   Clock,
@@ -142,7 +142,7 @@ export default function AdminDashboardPage() {
     {
       title: 'Estimated Revenue',
       value: formatCOP(stats ? stats.totalEstimatedRevenue : 0),
-      icon: IndianRupee,
+      icon: DollarSign,
       description: 'Total projected value',
       trend: '+12%',
       trendUp: true,

@@ -32,7 +32,7 @@ import {
 } from '@/components/ui/dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
-  IndianRupee,
+  DollarSign,
   MousePointerClick,
   Target,
   Users,
@@ -131,37 +131,6 @@ export default function AffiliateDashboard() {
     }
   };
 
-  const handleSubmitLead = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitLoading(true);
-
-    try {
-      const response = await fetch('/api/affiliate/referrals', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          lead_name: submitForm.leadName,
-          lead_email: submitForm.leadEmail,
-          estimated_value: submitForm.estimatedValue,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        showNotification('success', '¡Referida registrada! Queda pendiente de aprobación.');
-        setShowSubmitModal(false);
-        setSubmitForm({ leadName: '', leadEmail: '', estimatedValue: '0' });
-        loadDashboardData();
-      } else {
-        showNotification('error', data.error || 'No pudimos registrar la referida');
-      }
-    } catch (_e) {
-      showNotification('error', 'No pudimos registrar la referida');
-    } finally {
-      setSubmitLoading(false);
-    }
-  };
 
   const handleGenerateCode = async () => {
     try {
@@ -249,10 +218,7 @@ export default function AffiliateDashboard() {
                 <p className="text-xl font-bold mt-1 tracking-tight">Empieza hoy a referir y a ganar</p>
               </div>
             </div>
-            <Button variant="secondary" onClick={() => setShowSubmitModal(true)} className="gap-2 hidden sm:flex bg-white text-emerald-700 hover:bg-emerald-50 border-0 shadow-md transform transition hover:scale-105 active:scale-95">
-              <Plus className="h-4 w-4" />
-              Registrar referida
-            </Button>
+            
           </CardContent>
         </Card>
       </motion.div>
@@ -451,60 +417,7 @@ export default function AffiliateDashboard() {
         </Card>
       </div>
 
-      {/* Submit Lead Modal */}
-      <Dialog open={showSubmitModal} onOpenChange={setShowSubmitModal}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Registrar referida</DialogTitle>
-            <DialogDescription>
-              Enter the details below to submit a lead. Ensure all information is accurate for proper tracking.
-            </DialogDescription>
-          </DialogHeader>
 
-          <form onSubmit={handleSubmitLead} className="space-y-4">
-            <div className="space-y-2">
-              <Label>Lead&apos;s Name *</Label>
-              <Input
-                required
-                value={submitForm.leadName}
-                onChange={(e) => setSubmitForm({ ...submitForm, leadName: e.target.value })}
-                placeholder="Nombre completo"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Contact Email *</Label>
-              <Input
-                type="email"
-                required
-                value={submitForm.leadEmail}
-                onChange={(e) => setSubmitForm({ ...submitForm, leadEmail: e.target.value })}
-                placeholder="nombre@correo.com"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Estimated Deal Size ({currencySymbol}) *</Label>
-              <Input
-                type="number"
-                required
-                value={submitForm.estimatedValue}
-                onChange={(e) => setSubmitForm({ ...submitForm, estimatedValue: e.target.value })}
-                placeholder="0"
-              />
-              <p className="text-xs text-muted-foreground">Escribe 0 si no sabes</p>
-            </div>
-
-            <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => setShowSubmitModal(false)}>
-                Cancelar
-              </Button>
-              <Button type="submit" disabled={submitLoading}>
-                {submitLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Submit Lead
-              </Button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

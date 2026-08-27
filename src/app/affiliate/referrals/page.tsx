@@ -50,6 +50,7 @@ import {
   Filter,
   Download,
 } from 'lucide-react';
+import { formatPesos } from '@/lib/money';
 
 interface Referral {
   id: string;
@@ -65,16 +66,9 @@ export default function ReferralsPage() {
   const { user, loading: authLoading } = useAuth();
   const [referrals, setReferrals] = useState<Referral[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showSubmitModal, setShowSubmitModal] = useState(false);
-  const [submitLoading, setSubmitLoading] = useState(false);
   const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
-  const [submitForm, setSubmitForm] = useState({
-    leadName: '',
-    leadEmail: '',
-    estimatedValue: '0',
-  });
 
   useEffect(() => {
     if (!authLoading && user) fetchReferrals();
@@ -93,34 +87,6 @@ export default function ReferralsPage() {
     }
   };
 
-  const handleSubmitLead = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitLoading(true);
-    try {
-      const res = await fetch('/api/affiliate/referrals', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          lead_name: submitForm.leadName,
-          lead_email: submitForm.leadEmail,
-          estimated_value: submitForm.estimatedValue,
-        }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        showNotification('success', 'Lead submitted successfully!');
-        setShowSubmitModal(false);
-        setSubmitForm({ leadName: '', leadEmail: '', estimatedValue: '0' });
-        fetchReferrals();
-      } else {
-        showNotification('error', data.error || 'No pudimos registrar la referida');
-      }
-    } catch (_e) {
-      showNotification('error', 'No pudimos registrar la referida');
-    } finally {
-      setSubmitLoading(false);
-    }
-  };
 
   const showNotification = (type: 'success' | 'error', message: string) => {
     setNotification({ type, message });
@@ -207,10 +173,7 @@ export default function ReferralsPage() {
           <h1 className="text-2xl font-bold tracking-tight">Referidas</h1>
           <p className="text-muted-foreground">Consulta y administra tus referidas</p>
         </div>
-        <Button onClick={() => setShowSubmitModal(true)} className="gap-1.5">
-          <Plus className="h-4 w-4" />
-          Registrar referida
-        </Button>
+        
       </div>
 
       {/* Stats */}
@@ -278,11 +241,10 @@ export default function ReferralsPage() {
               <Users className="h-12 w-12 text-muted-foreground/40 mb-3" />
               <p className="font-medium">No hay referidas</p>
               <p className="mt-1 text-sm text-muted-foreground">
-                {referrals.length === 0 ? 'Registra tu primera referida para empezar a ganar' : 'Prueba cambiando los filtros'}
+                {referrals.length === 0
+                  ? 'Comparte tu link y acá van a ir apareciendo solas'
+                  : 'Prueba cambiando los filtros'}
               </p>
-              {referrals.length === 0 && (
-                <Button className="mt-4" onClick={() => setShowSubmitModal(true)}>Registra tu primera referida</Button>
-              )}
             </div>
           ) : (
             <Table>
@@ -305,7 +267,7 @@ export default function ReferralsPage() {
                     <TableCell>{getStatusBadge(ref.status)}</TableCell>
                     <TableCell className="text-muted-foreground text-sm">{formatDate(ref.createdAt)}</TableCell>
                     <TableCell className="text-right font-semibold">
-                      {`\u20B9${(Number(ref.estimatedValue) || 0).toFixed(2)}`}
+                      {formatPesos(ref.estimatedValue)}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -315,56 +277,7 @@ export default function ReferralsPage() {
         </CardContent>
       </Card>
 
-      {/* Submit Lead Modal */}
-      <Dialog open={showSubmitModal} onOpenChange={setShowSubmitModal}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Registrar referida</DialogTitle>
-            <DialogDescription>
-              Llena los datos para registrar una referida.
-            </DialogDescription>
-          </DialogHeader>
-          <form onSubmit={handleSubmitLead} className="space-y-4">
-            <div className="space-y-2">
-              <Label>Lead&apos;s Name *</Label>
-              <Input
-                required
-                value={submitForm.leadName}
-                onChange={(e) => setSubmitForm({ ...submitForm, leadName: e.target.value })}
-                placeholder="Nombre completo"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Contact Email *</Label>
-              <Input
-                type="email"
-                required
-                value={submitForm.leadEmail}
-                onChange={(e) => setSubmitForm({ ...submitForm, leadEmail: e.target.value })}
-                placeholder="nombre@correo.com"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Valor estimado (COP) *</Label>
-              <Input
-                type="number"
-                required
-                value={submitForm.estimatedValue}
-                onChange={(e) => setSubmitForm({ ...submitForm, estimatedValue: e.target.value })}
-                placeholder="0"
-              />
-              <p className="text-xs text-muted-foreground">Escribe 0 si no sabes</p>
-            </div>
-            <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => setShowSubmitModal(false)}>Cancelar</Button>
-              <Button type="submit" disabled={submitLoading}>
-                {submitLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Submit Lead
-              </Button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
+
     </div>
   );
 }

@@ -21,7 +21,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import {
-  IndianRupee,
+  DollarSign,
   Clock,
   CheckCircle2,
   Ban,

@@ -52,7 +52,7 @@ import {
   Loader2,
   Users,
   Link2,
-  IndianRupee,
+  DollarSign,
   Wallet,
   Calendar,
   Clock,
@@ -133,7 +133,7 @@ const reportTypes: { value: ReportType; label: string; description: string; icon
   { value: 'summary', label: 'Summary', description: 'Overview of all metrics', icon: BarChart3 },
   { value: 'affiliates', label: 'Affiliates', description: 'Partner performance data', icon: Users },
   { value: 'referrals', label: 'Referrals', description: 'Referral lead details', icon: Link2 },
-  { value: 'commissions', label: 'Commissions', description: 'Commission records', icon: IndianRupee },
+  { value: 'commissions', label: 'Commissions', description: 'Commission records', icon: DollarSign },
   { value: 'payouts', label: 'Payouts', description: 'Payout history', icon: Wallet },
 ];
 

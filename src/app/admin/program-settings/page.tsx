@@ -52,7 +52,7 @@ import {
   Pencil,
   Trash2,
   Percent,
-  IndianRupee,
+  DollarSign,
   CheckCircle2,
   Globe,
   Code2,
@@ -437,7 +437,7 @@ export default function ProgramSettingsPage() {
                         {ruleForm.type === 'PERCENTAGE' ? (
                           <Percent className="absolute right-3 top-2.5 h-4 w-4 text-muted-foreground" />
                         ) : (
-                          <IndianRupee className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                          <DollarSign className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
                         )}
                         <Input
                           type="number"
