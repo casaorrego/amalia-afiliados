@@ -83,7 +83,11 @@ export class OTPService {
       // es el ÚNICO canal de login del portal: si Loops falla, nadie
       // entra, así que el error se propaga en vez de tragarse.
       const { sendOtpEmail } = await import('@/lib/loops');
-      const emailResult = await sendOtpEmail(email, code, user.name || '');
+      // Solo el primer nombre: "Hola María" lee mejor que "Hola María
+      // Fernanda Gómez Restrepo". Si no hay nombre, queda vacío y el
+      // saludo de la plantilla en Loops aguanta igual.
+      const primerNombre = (user.name || '').trim().split(/\s+/)[0] || '';
+      const emailResult = await sendOtpEmail(email, code, primerNombre);
 
       if (!emailResult.ok) {
         console.error('[otp] Loops no pudo mandar el código:', emailResult.error);
