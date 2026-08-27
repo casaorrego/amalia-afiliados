@@ -336,7 +336,7 @@ export default function RegisterPage() {
         {/* Footer */}
         {step !== 'success' && (
           <p className="text-center text-sm text-muted-foreground">
-            Already have an account?{' '}
+            ¿Ya tienes cuenta?{' '}
             <Link href="/login" className="font-medium text-primary hover:underline">
               Entrar
             </Link>
