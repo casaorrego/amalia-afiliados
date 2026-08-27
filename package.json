@@ -30,9 +30,9 @@
     "start": "next start",
     "lint": "next lint",
     "db:generate": "prisma generate",
-    "db:push": "node scripts/db-push.mjs",
     "db:seed": "tsx prisma/seed.ts",
-    "test:email": "node scripts/test-email.js"
+    "test:email": "node scripts/test-email.js",
+    "db:push": "prisma db push"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

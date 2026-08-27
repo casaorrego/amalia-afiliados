@@ -20,22 +20,32 @@ Los **referidos entre pacientes** NO pasan por acá — viven en
 
 ## Variables de entorno (Vercel)
 
-Solo tres, y las tres son secretas o propias de la instancia:
+Solo tres:
 
-| Variable | Valor |
+| Variable | De dónde sale |
 |---|---|
-| `DATABASE_URL` | Conexión de Supabase tal cual (session pooler) |
+| `DATABASE_URL` | **La pone Vercel sola** al crear la base (Storage → Neon) |
 | `JWT_SECRET` | Mínimo 32 caracteres. `openssl rand -base64 32` |
 | `LOOPS_API_KEY` | API key de Loops — **sin esto nadie puede entrar** |
 
 Todo lo demás va quemado en `src/lib/config.ts`, porque no son secretos
-y no cambian entre despliegues: el dominio del portal y el schema de
-Postgres. Mismo criterio que en los triggers de amalia-app.
+y no cambian entre despliegues.
 
-⚠️ Las 28 tablas del portal viven en el schema `refferq`, aisladas de la
-base de pacientes. **No hace falta poner `?schema=refferq` en la URL**:
-`src/lib/prisma.ts` lo impone sobre la connection string, justamente
-para que no dependa de que nadie lo olvide al pegar la variable.
+## Por qué el portal tiene su PROPIA base de datos
+
+Al principio se intentó montarlo dentro de la base de Supabase de Amalia
+(en un schema aparte). Se descartó por dos razones:
+
+1. **No conectaba.** El host de Supabase de Amalia es solo IPv6 y las
+   funciones de Vercel solo salen por IPv4. El pooler de Supabase, que
+   sería la salida, no tiene registrado ese proyecto.
+2. **Seguridad.** Compartir base significaba que una vulnerabilidad en
+   este portal (código de terceros) tuviera una conexión hacia donde
+   viven las historias clínicas. Con base aparte no hay permisos que
+   limitar: sencillamente no hay ruta.
+
+El precio es que las dos partes se hablan por HTTPS en vez de compartir
+tablas. Son solo dos llamadas, ambas con la misma `X-API-Key`.
 
 ## Correo en Loops
 
@@ -48,45 +58,20 @@ con dos variables:
 Se resuelve por nombre (no por id), así que no hace falta una variable
 de entorno con el id: basta con que el nombre coincida.
 
-## Puesta en marcha
-
-1. En Supabase: `create schema if not exists refferq;`
-2. Crear las 28 tablas con **`npm run db:push`** — nunca
-   `npx prisma db push` a pelo.
-
-   El CLI de Prisma lee `DATABASE_URL` cruda y se salta el forzado de
-   schema que hace `src/lib/prisma.ts`. Una URL sin `?schema` apuntaría
-   a `public`, que es donde viven las historias clínicas. El wrapper
-   `scripts/db-push.mjs` impone el schema, aborta si la URL trae el
-   marcador `[YOUR-PASSWORD]` sin reemplazar, y corre Prisma SIN
-   `--accept-data-loss` para que cualquier operación destructiva falle
-   en vez de ejecutarse.
-3. Proyecto en Vercel con las variables de arriba.
-4. DNS: `CNAME afiliados → cname.vercel-dns.com`
-5. Registrarse en `/register`. **Ojo:** el portal bloquea a propósito
-   que alguien se auto-registre como admin, así que queda como
-   afiliada. Para volverse admin:
-   ```sql
-   update refferq."User" set role = 'ADMIN' where email = 'TU_CORREO';
-   ```
-6. Ya adentro: generar la API key (Admin → API keys) y definir la regla
-   de comisión (Admin → Program settings).
-
 ## Conexión con el resto de Amalia
 
-**Los códigos de afiliadas se validan desde el marketing** por una vista
-de solo lectura sobre este schema:
+**Validación de códigos.** Cuando una paciente escribe un código de
+afiliada en el paywall, el marketing pregunta acá:
 
-```sql
-create or replace view public.affiliate_codes as
-  select a."referralCode" as code
-  from refferq."Affiliate" a
-  join refferq."User" u on u.id = a."userId"
-  where u.status = 'ACTIVE';
+```
+GET https://afiliados.somosamalia.com/api/track/validate?code=XXXX
+X-API-Key: <la API key del portal>
+
+→ { "valid": true|false }
 ```
 
-**Las conversiones entran por API.** Cuando una referida llega a su
-segundo pago, amalia-app hace:
+**Conversiones.** Cuando esa referida llega a su segundo pago aprobado,
+amalia-app reporta la venta:
 
 ```
 POST https://afiliados.somosamalia.com/api/track/conversion
@@ -96,5 +81,19 @@ X-API-Key: <la API key del portal>
   "amount": 100000, "currency": "COP", "orderId": "..." }
 ```
 
-Ojo: `amount` va en **pesos**, no en centavos. Esa API key va como
-`AFILIADOS_API_KEY` en los Vercel de amalia-app y del marketing.
+Ojo: `amount` va en **pesos**, no en centavos. Esa API key se genera en
+el portal (Admin → API keys) y va como `AFILIADOS_API_KEY` en los Vercel
+de amalia-app y del marketing.
+
+## Puesta en marcha (resumen)
+
+1. Vercel → Storage → Neon. `DATABASE_URL` queda puesta sola.
+2. Agregar `JWT_SECRET` y `LOOPS_API_KEY`.
+3. `npm run db:push` (o desde el build) para crear las tablas.
+4. DNS: `CNAME afiliados → cname.vercel-dns.com`
+5. Registrarse en `/register` — queda como afiliada, porque el portal
+   bloquea a propósito el auto-registro como admin. Para subirse:
+   ```sql
+   update "User" set role = 'ADMIN' where email = 'TU_CORREO';
+   ```
+6. Generar la API key y la regla de comisión.

@@ -1,45 +1,16 @@
 import { PrismaClient } from '@prisma/client';
 import { unstable_cache } from 'next/cache';
 import * as bcrypt from 'bcryptjs';
-import { DB_SCHEMA } from '@/lib/config';
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
-/**
- * Fuerza ?schema=refferq sobre la connection string.
- *
- * El portal comparte la base de datos con las pacientes de Amalia y sus
- * 28 tablas viven en un schema aparte. Si la URL llega sin ese
- * parámetro, Postgres usa 'public' y el portal se montaría ENCIMA de la
- * base clínica. En vez de confiar en que nadie lo olvide al pegar la
- * variable en Vercel, se impone acá.
- */
-function urlConSchema(): string | undefined {
-  const raw = process.env.DATABASE_URL;
-  if (!raw) return undefined;
-  try {
-    const u = new URL(raw);
-    if (u.searchParams.get('schema') !== DB_SCHEMA) {
-      u.searchParams.set('schema', DB_SCHEMA);
-    }
-    return u.toString();
-  } catch {
-    // URL rara (no parseable): se devuelve tal cual y que Prisma falle
-    // con su propio error, que es más claro que uno nuestro.
-    return raw;
-  }
-}
-
 // Lazy initialization — avoids crashing at import time when DATABASE_URL
 // is unavailable (e.g. during Docker build prerendering)
 function getPrismaClient(): PrismaClient {
   if (!globalForPrisma.prisma) {
-    const url = urlConSchema();
-    globalForPrisma.prisma = url
-      ? new PrismaClient({ datasourceUrl: url })
-      : new PrismaClient();
+    globalForPrisma.prisma = new PrismaClient();
   }
   return globalForPrisma.prisma;
 }
