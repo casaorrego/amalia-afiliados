@@ -21,6 +21,8 @@ export const affiliateCreateSchema = z.object({
     payoutMethod: z.string().optional(),
     paypalEmail: z.string().optional(),
     sendWelcomeEmail: z.boolean().optional(),
+    // Código a mano (opcional): el @ de una influencer, por ejemplo.
+    referralCode: z.string().optional(),
 });
 
 // Payout Validation

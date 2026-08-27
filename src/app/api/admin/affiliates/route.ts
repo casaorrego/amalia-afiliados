@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { name, email, password, payoutMethod, paypalEmail, sendWelcomeEmail } = data;
+    const { name, email, password, payoutMethod, paypalEmail, sendWelcomeEmail, referralCode } = data;
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
@@ -123,11 +123,18 @@ export async function POST(request: NextRequest) {
       }
     });
 
+    // Código legible: el nombre a secas si está libre. Si el admin
+    // escribió uno a mano (el @ de una influencer, por ejemplo), manda ese.
+    const { generarCodigoAfiliada, normalizarCodigoManual } = await import('@/lib/affiliate-code');
+    const codigo =
+      (referralCode ? await normalizarCodigoManual(referralCode) : null) ??
+      (await generarCodigoAfiliada(name));
+
     // Create affiliate profile
     const affiliate = await prisma.affiliate.create({
       data: {
         userId: newUser.id,
-        referralCode: `AF${Date.now()}${(await import('crypto')).randomBytes(3).toString('hex').toUpperCase().slice(0, 4)}`,
+        referralCode: codigo,
         balanceCents: 0,
         // Se guarda lo que el admin llenó en el formulario. Antes esto
         // era `{}` fijo: el método de pago se descartaba en silencio y

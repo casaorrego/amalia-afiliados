@@ -104,6 +104,7 @@ export default function PartnersPage() {
     partnerGroup: 'Default',
     country: 'N/A',
     payoutMethod: 'Nequi',
+    referralCode: '',
     paypalEmail: '',
     sendWelcomeEmail: true,
     trackingParameter: 'ref',
@@ -213,6 +214,7 @@ export default function PartnersPage() {
           company: newPartner.company,
           payoutMethod: newPartner.payoutMethod,
           paypalEmail: newPartner.paypalEmail || newPartner.email,
+          referralCode: newPartner.referralCode || undefined,
         }),
       });
 
@@ -228,7 +230,7 @@ export default function PartnersPage() {
         setShowCreateModal(false);
         setNewPartner({
           firstName: '', lastName: '', email: '', company: '',
-          partnerGroup: 'Default', country: 'N/A', payoutMethod: 'Nequi',
+          partnerGroup: 'Default', country: 'N/A', payoutMethod: 'Nequi', referralCode: '',
           paypalEmail: '', sendWelcomeEmail: true, trackingParameter: 'ref',
         });
         fetchPartners();
@@ -633,6 +635,20 @@ export default function PartnersPage() {
                   </Select>
                 </div>
                 
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="referralCode">Referral code (optional)</Label>
+                <Input
+                  id="referralCode"
+                  type="text"
+                  value={newPartner.referralCode}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewPartner({ ...newPartner, referralCode: e.target.value })}
+                  placeholder="Leave empty to use their first name"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Letters only. Useful for an influencer who wants her handle.
+                  If empty (or taken) we generate one from her name.
+                </p>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="paypalEmail">Nequi number (optional)</Label>
