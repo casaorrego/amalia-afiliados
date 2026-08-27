@@ -119,7 +119,7 @@ export async function POST(req: NextRequest) {
         referralId: referral?.id || null,
         eventType: 'PURCHASE',
         amountCents,
-        currency: currency || 'USD',
+        currency: currency || 'COP',
         status: 'PENDING',
         eventMetadata: {
           orderId: orderId || null,
@@ -130,8 +130,42 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Note: Commission calculation will be done by the commission rules system
-    // This just creates the conversion record
+    // ── Comisión ──────────────────────────────────────────────
+    // El upstream dejaba acá un comentario diciendo que "el sistema de
+    // reglas" calcularía la comisión, pero ese sistema no existe: la
+    // conversión se registraba y el saldo de la afiliada nunca subía.
+    //
+    // Se aplica la regla marcada como default: FIXED = monto fijo por
+    // referida (lo nuestro), PERCENTAGE = % sobre la venta. Queda en
+    // PENDING; el admin la aprueba y la paga. Si no hay regla, se
+    // registra la venta igual y queda en los logs — perder la venta
+    // por una comisión sin configurar sería peor.
+    try {
+      const regla = await prisma.commissionRule.findFirst({
+        where: { isDefault: true, isActive: true },
+      });
+      if (!regla) {
+        console.warn('[conversion] sin regla de comisión por defecto — venta registrada sin comisión');
+      } else {
+        const comisionCents =
+          regla.type === 'FIXED'
+            ? Math.round(regla.value * 100)
+            : Math.round((amountCents * regla.value) / 100);
+        await prisma.commission.create({
+          data: {
+            conversionId: conversion.id,
+            affiliateId: affiliate.id,
+            userId: affiliate.user.id,
+            amountCents: comisionCents,
+            rate: regla.value,
+            status: 'PENDING',
+          },
+        });
+        console.log('[conversion] comisión creada:', comisionCents / 100);
+      }
+    } catch (err) {
+      console.error('[conversion] no se pudo crear la comisión:', err);
+    }
 
     console.log('✅ Conversion tracked successfully:', {
       conversionId: conversion.id,

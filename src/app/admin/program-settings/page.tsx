@@ -180,9 +180,17 @@ export default function ProgramSettingsPage() {
         setRuleDialog(false);
         setEditingRule(null);
         setRuleForm({ name: '', type: 'PERCENTAGE', value: '', isDefault: false });
+      } else {
+        // Antes esto era silencio: si el guardado fallaba, el modal se
+        // quedaba quieto y no habia forma de saber por que. Asi paso
+        // desapercibido que la pantalla mandaba un tipo ('FLAT') que la
+        // base no acepta.
+        const err = await res.json().catch(() => null);
+        alert(`No se pudo guardar la regla: ${err?.error || res.status}`);
       }
     } catch (error) {
       console.error('Failed to save rule:', error);
+      alert('No se pudo guardar la regla. Revisa la conexión.');
     } finally {
       setSavingRule(false);
     }
@@ -427,7 +435,7 @@ export default function ProgramSettingsPage() {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="PERCENTAGE">Percentage</SelectItem>
-                          <SelectItem value="FLAT">Flat Amount</SelectItem>
+                          <SelectItem value="FIXED">Flat amount (COP)</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -441,7 +449,7 @@ export default function ProgramSettingsPage() {
                         )}
                         <Input
                           type="number"
-                          className={ruleForm.type === 'FLAT' ? 'pl-9' : ''}
+                          className={ruleForm.type === 'FIXED' ? 'pl-9' : ''}
                           value={ruleForm.value}
                           onChange={(e) => setRuleForm({ ...ruleForm, value: e.target.value })}
                           placeholder={ruleForm.type === 'PERCENTAGE' ? '10' : '500'}
