@@ -12,8 +12,14 @@ export async function middleware(request: NextRequest) {
     // 1. Define protected routes
     const isAdminRoute = pathname.startsWith('/api/admin') || pathname.startsWith('/admin');
     const isAffiliateRoute = pathname.startsWith('/api/affiliate') || pathname.startsWith('/affiliate');
+    // /api/auth/me: sirve para CUALQUIER usuario autenticado (no pide un
+    // rol concreto), pero SÍ necesita pasar por acá — lee la identidad de
+    // la cabecera que este middleware inyecta. Estaba en el matcher pero
+    // se salía por este return, así que llegaba sin identidad, respondía
+    // 401, y useAuth mandaba a /login: entrabas y te sacaba de una.
+    const isMeRoute = pathname === '/api/auth/me';
 
-    if (!isAdminRoute && !isAffiliateRoute) {
+    if (!isAdminRoute && !isAffiliateRoute && !isMeRoute) {
         return NextResponse.next();
     }
 
@@ -58,12 +64,22 @@ export async function middleware(request: NextRequest) {
             return NextResponse.redirect(new URL('/login', request.url));
         }
 
-        // 5. Inject user info into headers for API usage (optional but helpful)
-        const response = NextResponse.next();
-        response.headers.set('x-user-id', payload.userId as string);
-        response.headers.set('x-user-role', userRole);
+        // 5. Pasarle la identidad a la ruta.
+        //
+        // OJO: tiene que ir en las cabeceras de la PETICIÓN, no en las de
+        // la respuesta. `response.headers.set(...)` se las manda al
+        // NAVEGADOR — la ruta nunca las ve, así que las 41 rutas que
+        // hacen request.headers.get('x-user-id') recibían null y
+        // respondían 401. El panel entero quedaba inservible.
+        //
+        // Sobrescribir (no añadir) también cierra el hueco de que alguien
+        // mande su propia cabecera x-user-id desde afuera para hacerse
+        // pasar por otro: acá se pisa siempre con lo que dice el JWT.
+        const requestHeaders = new Headers(request.headers);
+        requestHeaders.set('x-user-id', payload.userId as string);
+        requestHeaders.set('x-user-role', userRole);
 
-        return response;
+        return NextResponse.next({ request: { headers: requestHeaders } });
     } catch (error) {
         if (pathname.startsWith('/api/')) {
             return NextResponse.json(
