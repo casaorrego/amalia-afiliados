@@ -629,33 +629,16 @@ export default function PartnersPage() {
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="space-y-2">
-                  <Label>Payout Method</Label>
-                  <Select
-                    value={newPartner.payoutMethod}
-                    onValueChange={(value: string) => setNewPartner({ ...newPartner, payoutMethod: value })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {/* Medios que existen en Colombia. El upstream traía
-                          PayPal, Wise y Crypto — inservibles acá. */}
-                      <SelectItem value="Nequi">Nequi</SelectItem>
-                      <SelectItem value="Daviplata">Daviplata</SelectItem>
-                      <SelectItem value="Transferencia bancaria">Bank transfer</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+                
               </div>
               <div className="space-y-2">
-                <Label htmlFor="paypalEmail">Nequi / Daviplata number or bank account (optional)</Label>
+                <Label htmlFor="paypalEmail">Nequi number (optional)</Label>
                 <Input
                   id="paypalEmail"
                   type="text"
                   value={newPartner.paypalEmail}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewPartner({ ...newPartner, paypalEmail: e.target.value })}
-                  placeholder="defaults to their email"
+                  placeholder="3001234567"
                 />
               </div>
               <div className="flex items-center space-x-2">

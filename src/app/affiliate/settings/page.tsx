@@ -252,35 +252,24 @@ export default function SettingsPage() {
             <CreditCard className="h-4 w-4" />
             Datos de pago
           </CardTitle>
-          <CardDescription>Configura cómo recibes tus pagos</CardDescription>
+          <CardDescription>A dónde te enviamos tus comisiones</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div className="space-y-2">
-              <Label>Método de pago</Label>
-              <Select
-                value={settingsForm.paymentMethod}
-                onValueChange={(v) => setSettingsForm({ ...settingsForm, paymentMethod: v })}
-              >
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  {/* Medios de pago que existen en Colombia. El upstream
-                      traía PayPal, Stripe, Wise y UPI (India), inservibles
-                      para pagarle a una afiliada acá. */}
-                  <SelectItem value="Nequi">Nequi</SelectItem>
-                  <SelectItem value="Daviplata">Daviplata</SelectItem>
-                  <SelectItem value="Transferencia bancaria">Transferencia bancaria</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label>Correo o cuenta de pago</Label>
-              <Input
-                value={settingsForm.paymentEmail}
-                onChange={(e) => setSettingsForm({ ...settingsForm, paymentEmail: e.target.value })}
-                placeholder="nombre@correo.com"
-              />
-            </div>
+          {/* Solo Nequi (founder 27-ago): un único medio quita fricción a
+              la afiliada y quita margen de error al momento de pagarle.
+              Por eso no hay selector — el método es fijo. */}
+          <div className="space-y-2">
+            <Label>Tu número de Nequi</Label>
+            <Input
+              value={settingsForm.paymentEmail}
+              onChange={(e) => setSettingsForm({ ...settingsForm, paymentEmail: e.target.value })}
+              placeholder="3001234567"
+              inputMode="numeric"
+              maxLength={10}
+            />
+            <p className="text-xs text-muted-foreground">
+              A este número te transferimos tus comisiones. Revísalo bien.
+            </p>
           </div>
 
           <Separator />
