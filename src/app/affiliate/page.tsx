@@ -366,8 +366,10 @@ export default function AffiliateDashboard() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Nombre</TableHead>
-                  <TableHead>Correo</TableHead>
+                  {/* Una sola columna: Amalia manda un seudónimo, no el
+                      nombre ni el correo de la paciente. Dos columnas de
+                      lo mismo se leían como un dato roto. */}
+                  <TableHead>Referida</TableHead>
                   <TableHead>Estado</TableHead>
                   <TableHead>Fecha</TableHead>
                   <TableHead className="text-right">Valor</TableHead>
@@ -377,7 +379,6 @@ export default function AffiliateDashboard() {
                 {referrals.slice(0, 5).map((ref) => (
                   <TableRow key={ref.id}>
                     <TableCell className="font-medium">{ref.leadName}</TableCell>
-                    <TableCell className="text-muted-foreground">{ref.leadEmail}</TableCell>
                     <TableCell>{getStatusBadge(ref.status)}</TableCell>
                     <TableCell className="text-muted-foreground text-sm">{formatDate(ref.createdAt)}</TableCell>
                     <TableCell className="text-right font-semibold">
