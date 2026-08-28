@@ -14,7 +14,9 @@
  * EXACTO, se resuelven por nombre — ver lib/loops.ts):
  *
  *   afiliados_codigo_acceso   {codigo} {nombre}          — login
- *   afiliados_bienvenida      {nombre} {codigo} {link} {entrar} {manual}
+ *   afiliados_bienvenida      {nombre} {codigo} {link} {entrar}
+ *                             (el manual va ADJUNTO desde Loops, no como link:
+ *                              es material interno y no se publica)
  *   afiliados_comision_nueva  {nombre} {monto} {referida}
  *   afiliados_pago_en_camino  {nombre} {monto} {metodo}
  *   afiliados_pago_enviado    {nombre} {monto} {metodo}

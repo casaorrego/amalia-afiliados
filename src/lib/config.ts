@@ -23,11 +23,6 @@ export const APP_URL =
  *  El marketing lee ese ?ref y lo guarda 30 días. */
 export const MARKETING_URL = "https://somosamalia.com";
 
-/** Manual de la embajadora: reglas legales, ganchos, formatos y
- *  checklist para publicar. Vive en el marketing (no en el portal)
- *  porque se comparte por correo antes del primer login. */
-export const MANUAL_URL = `${MARKETING_URL}/embajadoras/manual`;
-
 /** Link corto que comparte la afiliada. Con dominio propio en vez de
  *  un acortador público: bit.ly y compañía comparten dominio con
  *  millones de links, heredan mala reputación y se marcan como spam. */

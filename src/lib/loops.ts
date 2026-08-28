@@ -144,14 +144,12 @@ export async function sendBienvenidaEmail(args: {
   codigo: string;
   link: string;
   entrar: string;
-  manual: string;
 }): Promise<LoopsResult> {
   return sendTransactionalByName(BIENVENIDA_EMAIL_NAME, args.email, {
     nombre: args.nombre,
     codigo: args.codigo,
     link: args.link,
     entrar: args.entrar,
-    manual: args.manual,
   });
 }
 

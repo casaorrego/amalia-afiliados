@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<title>Manual de la embajadora — Amalia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700&family=Fraunces:opsz,wght@9..144,400;9..144,500&display=swap">
+<style>
+:root { --ink:#1a1a1a; --ink-soft:#555; --ink-faint:#8a8a8a; --line:rgba(26,26,26,.14);
+        --cream:#f5ede3; --cream-soft:#faf6f0; }
+@page { size: A4; margin: 16mm 15mm 18mm; }
+* { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { margin:0; font-family:'Open Sans',-apple-system,sans-serif; color:var(--ink);
+       font-size:10.5pt; line-height:1.55; }
+h1,h2,h3 { margin:0; letter-spacing:-.01em; }
+p { margin:0; }
+strong { font-weight:700; }
+em { font-style:italic; }
+
+/* ── Portada ─────────────────────────────────────────────── */
+.pdf-portada { height: 247mm; display:flex; flex-direction:column; justify-content:space-between;
+  break-after:page; }
+.pdf-portada img { width:52mm; }
+.pdf-portada h1 { font-family:'Fraunces',Georgia,serif; font-weight:400; font-size:34pt;
+  line-height:1.05; max-width:15ch; margin-bottom:8mm; }
+.pdf-portada .pdf-eyebrow { font-size:8.5pt; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--ink-faint); font-weight:600; margin-bottom:5mm; }
+.pdf-portada .pdf-intro { font-size:11.5pt; color:var(--ink-soft); max-width:62ch; }
+.pdf-portada .pdf-pie { font-size:8.5pt; color:var(--ink-faint); border-top:1px solid var(--line);
+  padding-top:4mm; }
+
+/* ── Secciones ───────────────────────────────────────────── */
+.man-hero { display:none; }               /* el hero vive en la portada */
+.man-sec { padding:0; margin-bottom:9mm; break-inside:auto; }
+.man-sec > .container > h2 { font-family:'Fraunces',Georgia,serif; font-weight:400; font-size:20pt;
+  margin-bottom:2mm; break-after:avoid; }
+.man-lead { color:var(--ink-soft); margin-bottom:5mm; max-width:70ch; break-after:avoid; }
+
+.man-reglas { display:flex; flex-direction:column; gap:4mm; }
+.man-regla { border:1.2pt solid var(--ink); border-radius:4mm; padding:5mm 6mm; break-inside:avoid; }
+.man-regla-num { display:inline-flex; align-items:center; justify-content:center; width:7mm; height:7mm;
+  border-radius:50%; background:var(--ink); color:#fff; font-size:9pt; font-weight:700; margin-bottom:2.5mm; }
+.man-regla h3 { font-size:12pt; margin-bottom:1.5mm; }
+.man-regla p { color:var(--ink-soft); font-size:10pt; }
+.man-regla p + p { margin-top:2mm; }
+
+.man-tabla-wrap { border:1px solid var(--line); border-radius:3mm; overflow:hidden; }
+.man-tabla { width:100%; border-collapse:collapse; font-size:9.5pt; }
+.man-tabla th,.man-tabla td { text-align:left; padding:2.6mm 4mm; border-bottom:1px solid var(--line);
+  vertical-align:top; line-height:1.45; }
+.man-tabla thead th { font-size:8pt; text-transform:uppercase; letter-spacing:.08em;
+  color:var(--ink-faint); font-weight:600; background:var(--cream-soft); }
+.man-tabla tr:last-child td { border-bottom:0; }
+.man-tabla tr { break-inside:avoid; }
+.man-no { color:#a8503a; }
+.man-si { font-weight:500; }
+
+.man-pasos { display:flex; flex-direction:column; gap:3mm; }
+.man-paso { display:flex; gap:4mm; padding:4mm 5mm; background:var(--cream-soft);
+  border:1px solid var(--line); border-radius:3mm; break-inside:avoid; }
+.man-paso-n { flex:none; width:6mm; height:6mm; border-radius:50%; background:#fff;
+  border:1px solid var(--line); display:flex; align-items:center; justify-content:center;
+  font-size:8.5pt; font-weight:700; }
+.man-paso h3 { font-size:11pt; margin-bottom:1mm; }
+.man-paso p { color:var(--ink-soft); font-size:10pt; }
+.man-opcional { font-size:7.5pt; text-transform:uppercase; letter-spacing:.08em;
+  color:var(--ink-faint); font-weight:600; margin-left:2mm; }
+
+.man-hooks { display:flex; flex-direction:column; gap:4mm; }
+.man-hook-grupo { border:1px solid var(--line); border-radius:3mm; padding:5mm 6mm; break-inside:avoid; }
+.man-hook-grupo h3 { font-size:11.5pt; margin-bottom:.5mm; }
+.man-hook-para { font-size:9pt; color:var(--ink-faint); margin-bottom:3mm; }
+.man-hook-grupo ol { margin:0; padding-left:6mm; }
+.man-hook-grupo li { font-size:10pt; padding:1.1mm 0; }
+
+.man-guion { border:1px solid var(--line); border-radius:3mm; padding:5mm 6mm;
+  background:var(--cream-soft); break-inside:avoid; }
+.man-guion + .man-guion { margin-top:3mm; }
+.man-guion h3 { font-size:11.5pt; margin-bottom:.5mm; }
+.man-dur { font-size:9pt; color:var(--ink-faint); margin-bottom:3mm; }
+.man-guion ol { margin:0; padding-left:6mm; }
+.man-guion li { font-size:10pt; color:var(--ink-soft); padding:1.1mm 0; }
+.man-guion li strong { color:var(--ink); }
+
+.man-cierre { background:var(--ink); color:#fff; border-radius:4mm; padding:6mm 7mm; break-inside:avoid; }
+.man-cierre h2 { color:#fff !important; font-size:14pt !important; font-family:'Open Sans',sans-serif !important;
+  font-weight:700 !important; margin-bottom:2mm; }
+.man-cierre p { color:rgba(255,255,255,.75); font-size:10pt; margin-bottom:3mm; }
+.man-cierre a { color:#fff; font-weight:700; text-decoration:underline; font-size:10pt; }
+
+/* Cada bloque grande arranca en pagina limpia donde tiene sentido. */
+#hooks, #nodecir { break-before:page; }
+</style></head><body>
+
+<div class="pdf-portada">
+  <div>
+    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzNTM2IDY4OCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ieE1pZFlNaWQgbWVldCIgZmlsbD0iIzE1MTQwZiIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsPSJBbWFsaWEiPjx0aXRsZT5BbWFsaWE8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAgNjg4KSBzY2FsZSgxIC0xKSI+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAwKSIgZD0iTTQgMCAxOTQgNjg4SDUxOEw3MTcgMEg0NzJMNDQ2IDEzMkgyNjhMMjM5IDBaTTI4OSAyNTVINDIyTDM1NyA1NTZaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNjQ2IDApIiBkPSJNNTUgMFY2ODhIMjYzTDQzNSAzNTRMNjAzIDY4OEg4MTFWMEg2MDNWMzYwTDQ3NiAxMjBIMzkxTDI2MyAzNjBWMFoiLz48cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxNDQyIDApIiBkPSJNNCAwIDE5NCA2ODhINTE4TDcxNyAwSDQ3Mkw0NDYgMTMySDI2OEwyMzkgMFpNMjg5IDI1NUg0MjJMMzU3IDU1NloiLz48cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMDg4IDApIiBkPSJNNTUgMFY2ODhIMjcxVjE1OEg1MTVMNTA1IDBaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjU1NCAwKSIgZD0iTTU1IDBWNjg4SDI4MVYwWiIvPjxwYXRoIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI4MjAgMCkiIGQ9Ik00IDAgMTk0IDY4OEg1MThMNzE3IDBINDcyTDQ0NiAxMzJIMjY4TDIzOSAwWk0yODkgMjU1SDQyMkwzNTcgNTU2WiIvPjwvZz48L3N2Zz4=" alt="Amalia">
+  </div>
+  <div>
+    <p class="pdf-eyebrow">Manual de la embajadora</p>
+    <h1>Todo lo que necesitas para empezar</h1>
+    <p class="pdf-intro">Léelo una vez. Las tres reglas del principio son obligatorias — no son estilo, son ley colombiana y te protegen a ti tanto como a nosotras. El resto son herramientas: úsalas como te sirvan.</p>
+  </div>
+  <p class="pdf-pie">Amalia · Documento interno del programa de embajadoras · Agosto 2026<br>
+  No lo compartas por fuera del programa.</p>
+</div>
+
+<section class="man-hero">
+  <div class="container">
+    <p class="eyebrow">Manual de la embajadora</p>
+    <h1>Todo lo que necesitas para empezar</h1>
+    <p>Léelo una vez. Las tres reglas de arriba son obligatorias — no son estilo, son ley colombiana y te protegen a ti tanto como a nosotras. El resto son herramientas: úsalas como te sirvan.</p>
+    
+  </div>
+</section>
+
+<section class="man-sec" id="reglas">
+  <div class="container">
+    <h2>Las 3 reglas</h2>
+    <p class="man-lead">Si solo lees una parte del manual, que sea esta. Romper cualquiera de las tres puede costarte una multa a ti, no solo a nosotras.</p>
+    <div class="man-reglas">
+      <article class="man-regla">
+        <span class="man-regla-num">1</span>
+        <h3>No nombres el medicamento</h3>
+        <p>Nunca digas ni escribas la marca ni el principio activo, y no muestres la caja, el lápiz ni la jeringa. En Colombia no se puede publicitar al público un medicamento de venta bajo fórmula médica.</p>
+        <p>Di <strong>“tratamiento médico supervisado”</strong> o <strong>“acompañamiento con una médica”</strong>. Funciona igual y no te expone.</p>
+      </article>
+      <article class="man-regla">
+        <span class="man-regla-num">2</span>
+        <h3>Declara que es publicidad</h3>
+        <p>Todo contenido donde compartas tu código lleva <strong>#Publicidad</strong> y menciona a <strong>@somosamalia</strong>, visible desde el principio — no escondido al final ni entre veinte hashtags.</p>
+        <p>La Superintendencia de Industria y Comercio lo exige y las multas llegan hasta 2.000 salarios mínimos. Es literalmente la regla más barata de cumplir.</p>
+      </article>
+      <article class="man-regla">
+        <span class="man-regla-num">3</span>
+        <h3>No prometas ni recetes</h3>
+        <p>No digas cuántos kilos va a bajar alguien, no digas que es seguro para todas, y nunca respondas si a otra persona “le sirve”. Eso lo define una médica después de evaluarla.</p>
+        <p>Tu experiencia sí la puedes contar. Es tuya, es real y es lo que mejor funciona.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="man-sec" id="pago">
+  <div class="container">
+    <h2>Cómo te pagan</h2>
+    <p class="man-lead">Sin letra menuda.</p>
+    <div class="man-tabla-wrap">
+      <table class="man-tabla">
+        <tbody>
+          <tr><td style="width:230px"><strong>Cuánto</strong></td><td>$220.000 por cada paciente que llegue a su segundo mes de tratamiento. Monto fijo, no porcentaje.</td></tr>
+          <tr><td><strong>Cuándo se confirma</strong></td><td>Al segundo pago de tu referida. Desde su primer pago ya la ves en tu panel como <em>pendiente</em>, para que sepas que tu recomendación funcionó.</td></tr>
+          <tr><td><strong>Si cancela antes</strong></td><td>Esa comisión no se genera. Por eso el panel separa lo pendiente de lo confirmado: para que nunca cuentes con plata que todavía no está.</td></tr>
+          <tr><td><strong>Cómo se paga</strong></td><td>Transferencia a tu Nequi. Confirma que el número en tu perfil sea el correcto.</td></tr>
+          <tr><td><strong>Qué recibe ella</strong></td><td>$50.000 de descuento en su primer mes: paga $100.000 en vez de $150.000.</td></tr>
+          <tr><td><strong>Tope</strong></td><td>No hay. Ni de referidas ni de comisiones.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="man-sec" id="link">
+  <div class="container">
+    <h2>Tu link y tu código</h2>
+    <p class="man-lead">Son dos caminos al mismo lugar, y el segundo importa más de lo que parece.</p>
+    <div class="man-pasos">
+      <div class="man-paso">
+        <span class="man-paso-n">1</span>
+        <div>
+          <h3>Tu link corto</h3>
+          <p><strong>somosamalia.com/r/TUCÓDIGO</strong> — corto, se puede decir en voz alta y lleva tu marca. Va en la bio, en el sticker de la historia, en la descripción.</p>
+        </div>
+      </div>
+      <div class="man-paso">
+        <span class="man-paso-n">2</span>
+        <div>
+          <h3>Tu código funciona solo</h3>
+          <p>Si no puedes poner links, no importa: en la página de pago hay un campo para escribir el código. Si alguien lo escuchó en un video y lo escribe ahí, la comisión te queda a ti igual. <strong>Decirlo en voz alta vale más que tenerlo en la bio.</strong></p>
+        </div>
+      </div>
+      <div class="man-paso">
+        <span class="man-paso-n">3</span>
+        <div>
+          <h3>No uses bit.ly ni acortadores</h3>
+          <p>Comparten dominio con millones de links y heredan mala reputación: se marcan como spam y algunos operadores los bloquean. Tu link ya es corto y es de la marca — no lo escondas detrás de otro.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="man-sec" id="publicar">
+  <div class="container">
+    <h2>Checklist para publicar</h2>
+    <p class="man-lead">Lo obligatorio está marcado. Lo demás es lo que hacen las creadoras que les va bien: no está garantizado por la plataforma, pero no cuesta nada y probablemente ayuda.</p>
+    <div class="man-pasos">
+      <div class="man-paso">
+        <span class="man-paso-n">1</span>
+        <div>
+          <h3>Una sola vez, al arrancar<span class="man-opcional">Recomendado</span></h3>
+          <p>Durante 3 o 4 días, mira contenido del tema —salud metabólica, nutrición, hábitos— en dos tandas de 5 minutos al día. Le enseñas al algoritmo de qué va tu cuenta antes de publicar nada.</p>
+        </div>
+      </div>
+      <div class="man-paso">
+        <span class="man-paso-n">2</span>
+        <div>
+          <h3>¿Necesitas el link en bio?<span class="man-opcional">Solo si te hace falta</span></h3>
+          <p>Las cuentas Business permiten link desde cero seguidores, pero pierden el acceso a la música de tendencia — y ese audio es buena parte del alcance en TikTok. Si tu cuenta personal ya te deja poner link, quédate ahí. Si no, recuerda el paso 2 de arriba: el código solo también sirve.</p>
+        </div>
+      </div>
+      <div class="man-paso">
+        <span class="man-paso-n">3</span>
+        <div>
+          <h3>5 minutos antes de publicar<span class="man-opcional">Recomendado</span></h3>
+          <p>Scrollea contenido de tu tema justo antes de subir. Misma lógica que el paso 1, en pequeño.</p>
+        </div>
+      </div>
+      <div class="man-paso">
+        <span class="man-paso-n">4</span>
+        <div>
+          <h3>El gancho, en los primeros 3 segundos</h3>
+          <p>Ahí se decide si el video vive o muere. Promete algo concreto, abre una duda, o muestra algo que sorprenda. Abajo tienes 30 para elegir.</p>
+        </div>
+      </div>
+      <div class="man-paso">
+        <span class="man-paso-n">5</span>
+        <div>
+          <h3>Cierra siempre igual</h3>
+          <p>CTA + tu código, dicho en voz alta <em>y</em> en texto en pantalla. “Si quieres evaluarte, entra a somosamalia.com y pon mi código LAURA: te quedan $50.000 menos el primer mes.”</p>
+        </div>
+      </div>
+      <div class="man-paso">
+        <span class="man-paso-n">6</span>
+        <div>
+          <h3>#Publicidad y @somosamalia<span class="man-opcional">Obligatorio</span></h3>
+          <p>Antes de darle publicar, revisa que estén los dos y que se vean. Si no están, bórralo y vuelve a subirlo.</p>
+        </div>
+      </div>
+      <div class="man-paso">
+        <span class="man-paso-n">7</span>
+        <div>
+          <h3>Los primeros 30 minutos</h3>
+          <p>Quédate respondiendo comentarios. Es el rato que más pesa para el alcance, y los comentarios son de donde salen tus próximos tres videos.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="man-sec" id="hooks">
+  <div class="container">
+    <h2>Banco de ganchos</h2>
+    <p class="man-lead">Treinta primeras frases, agrupadas por quién eres. Ninguna nombra el medicamento — están escritas para que puedas usarlas tal cual. Cámbiales las palabras para que suenen a ti: un gancho prestado que suena falso no retiene a nadie.</p>
+    <div class="man-hooks">
+
+      <article class="man-hook-grupo">
+        <h3>Si estás en tratamiento</h3>
+        <p class="man-hook-para">Tu experiencia es el activo. No la adornes.</p>
+        <ol>
+          <li>“Nadie me dijo que el hambre también se trata.”</li>
+          <li>“Lo que cambió no fue mi fuerza de voluntad.”</li>
+          <li>“Me daba pena contarlo, así que empiezo por lo incómodo.”</li>
+          <li>“Tres cosas que hubiera querido saber antes de empezar.”</li>
+          <li>“Mi error del primer mes.”</li>
+          <li>“Esto es lo que me preguntan todos los días por DM.”</li>
+          <li>“Si llevas años intentando y nada te funciona, no es tu culpa.”</li>
+          <li>“Por primera vez en años no estoy contando calorías.”</li>
+        </ol>
+      </article>
+
+      <article class="man-hook-grupo">
+        <h3>Si eres nutricionista o entrenadora</h3>
+        <p class="man-hook-para">Tu autoridad es el activo. Habla desde la consulta.</p>
+        <ol>
+          <li>“Le dije a una paciente que dejara de contar calorías. Te explico por qué.”</li>
+          <li>“La mayoría de mis pacientes no falla por disciplina.”</li>
+          <li>“Qué hago cuando una paciente ya lo intentó todo.”</li>
+          <li>“Lo que no se dice en consulta sobre el peso.”</li>
+          <li>“En qué momento dejo de trabajar sola y remito.”</li>
+          <li>“Deja de decirle a tus pacientes que coman menos.”</li>
+          <li>“Tres señales de que el problema no es la dieta.”</li>
+        </ol>
+      </article>
+
+      <article class="man-hook-grupo">
+        <h3>Si eres creadora</h3>
+        <p class="man-hook-para">Tu comunidad ya te está preguntando. Respóndele.</p>
+        <ol>
+          <li>“Me lo preguntaron 40 veces esta semana, así que lo respondo.”</li>
+          <li>“Lo que aprendí hablando con una médica sobre el peso.”</li>
+          <li>“Cosas que normalizamos y no son normales: tener hambre todo el día.”</li>
+          <li>“Nadie habla de esto después de los 35.”</li>
+          <li>“Cuánta plata me gasté en dietas antes de entender esto.”</li>
+          <li>“Pregunta incómoda: ¿cuántas dietas llevas?”</li>
+          <li>“Esto me lo dijo mi médica y me cambió la cabeza.”</li>
+          <li>“POV: llevas diez años empezando el lunes.”</li>
+        </ol>
+      </article>
+
+      <article class="man-hook-grupo">
+        <h3>Ángulo seguridad</h3>
+        <p class="man-hook-para">El más fuerte para nosotras y el que menos gente usa.</p>
+        <ol>
+          <li>“Antes de comprarle a una cuenta de Instagram, mira esto.”</li>
+          <li>“Cómo saber si lo que te están vendiendo por redes es seguro.”</li>
+          <li>“Lo barato me salió caro: lo que me pasó por comprar sin fórmula.”</li>
+          <li>“Lo primero que pregunté fue: ¿esto es seguro?”</li>
+          <li>“Si nadie te pidió exámenes, corre.”</li>
+          <li>“Qué revisa una médica antes de tratarte el peso.”</li>
+          <li>“No es un truco de internet, es supervisión médica.”</li>
+        </ol>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section class="man-sec" id="formatos">
+  <div class="container">
+    <h2>3 formatos que funcionan</h2>
+    <p class="man-lead">No necesitas producción. Necesitas estructura y decir el código al final.</p>
+
+    <div class="man-guion">
+      <h3>1. Mi experiencia real</h3>
+      <p class="man-dur">30–45 segundos · cámara frontal, sin edición</p>
+      <ol>
+        <li><strong>0–3s · Gancho.</strong> Una frase incómoda o personal. Nada de “hola chicas”.</li>
+        <li><strong>3–12s · El antes.</strong> Cómo estabas. Concreto: qué intentaste, cuánto tiempo, cómo te sentías.</li>
+        <li><strong>12–30s · El cambio.</strong> Qué es distinto ahora. Sin cifras de peso, sin nombrar el medicamento. Habla de hambre, energía, cabeza.</li>
+        <li><strong>30–40s · El cómo.</strong> “Es un tratamiento con una médica, no una dieta.” Nombra la evaluación.</li>
+        <li><strong>Cierre.</strong> CTA + código en voz y en pantalla + #Publicidad.</li>
+      </ol>
+    </div>
+
+    <div class="man-guion">
+      <h3>2. Respondiendo tu pregunta</h3>
+      <p class="man-dur">15–25 segundos · responde un comentario real</p>
+      <ol>
+        <li><strong>0–3s.</strong> Lee el comentario en voz alta. El comentario ES el gancho.</li>
+        <li><strong>3–15s.</strong> Responde una sola cosa, bien. No metas tres temas.</li>
+        <li><strong>15–20s.</strong> Si la pregunta es médica —“¿me sirve a mí?”, “¿es seguro?”— la respuesta es siempre la misma: <em>“eso lo define la médica cuando te evalúa”</em>.</li>
+        <li><strong>Cierre.</strong> CTA + código + #Publicidad.</li>
+      </ol>
+    </div>
+
+    <div class="man-guion">
+      <h3>3. Tres cosas que…</h3>
+      <p class="man-dur">25–40 segundos · texto en pantalla, corte por punto</p>
+      <ol>
+        <li><strong>0–3s.</strong> “Tres cosas que nadie te dice de…” — la lista promete y retiene.</li>
+        <li><strong>Un corte por punto.</strong> Cada 5–8 segundos cambia el plano o el texto: es lo que sostiene la atención.</li>
+        <li><strong>Deja la mejor de última.</strong> Y anúnciala: “la tercera es la que a mí me sirvió”.</li>
+        <li><strong>Cierre.</strong> CTA + código + #Publicidad.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="man-sec" id="nodecir">
+  <div class="container">
+    <h2>Qué no decir</h2>
+    <p class="man-lead">La columna de la izquierda te puede costar una multa o dejarte sin cuenta. La de la derecha dice lo mismo y no.</p>
+    <div class="man-tabla-wrap">
+      <table class="man-tabla">
+        <thead><tr><th>En vez de esto</th><th>Di esto</th></tr></thead>
+        <tbody>
+          <tr><td class="man-no">Nombrar la marca o el principio activo</td><td class="man-si">“Un tratamiento médico supervisado”</td></tr>
+          <tr><td class="man-no">Mostrar la caja, el lápiz o la jeringa</td><td class="man-si">Muéstrate tú: tu comida, tu rutina, tu cara</td></tr>
+          <tr><td class="man-no">“Vas a bajar X kilos”</td><td class="man-si">“A mí me funcionó. A cada quien la médica le dice si aplica”</td></tr>
+          <tr><td class="man-no">“Es seguro, no tiene efectos”</td><td class="man-si">“Hay evaluación médica justamente porque no es para todas”</td></tr>
+          <tr><td class="man-no">“Sin dieta ni ejercicio”</td><td class="man-si">“Con acompañamiento médico y cambios de hábitos”</td></tr>
+          <tr><td class="man-no">“Yo te lo consigo” / “te lo mando”</td><td class="man-si">“Entra, te evalúa una médica y ella decide”</td></tr>
+          <tr><td class="man-no">Responder “sí, a ti también te sirve”</td><td class="man-si">“No sabría decirte, eso lo define la médica”</td></tr>
+          <tr><td class="man-no">Poner #Publicidad escondido entre 20 hashtags</td><td class="man-si">#Publicidad visible, al principio, con @somosamalia</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="man-sec">
+  <div class="container">
+    <div class="man-cierre">
+      <h2>¿Te quedó una duda?</h2>
+      <p>Escríbenos y te contesta una persona del equipo. Si es una duda médica de alguien que te escribió, no la respondas tú — mándala a evaluarse y listo. Nadie espera que sepas de medicina; esperan que seas honesta.</p>
+      <a href="mailto:contacto@somosamalia.com?subject=Duda%20de%20embajadora">Escríbenos</a>
+    </div>
+  </div>
+</section>
+
+
+</body></html>
